@@ -75,7 +75,7 @@ public class User extends BaseEntity {
 
 	@Builder.Default
 	@Column(columnDefinition = "boolean default false")
-	private boolean SupremeHost = false;
+	private boolean SupremeHost = false; 
 
 	@Builder.Default
 	@Column(name = "phone_verified", columnDefinition = "boolean default false")

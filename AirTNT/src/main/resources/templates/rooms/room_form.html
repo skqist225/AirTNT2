@@ -11,7 +11,7 @@
       </div>
 
       <form
-        th:action="@{/rooms/save}"
+        th:action="@{/admin/rooms/save}"
         method="post"
         style="max-width: 700px; margin: 0 auto"
         enctype="multipart/form-data"
@@ -322,8 +322,8 @@
     </div>
     <script type="text/javascript">
       MAX_FILE_SIZE = 1024000;
-      moduleURL = "[[@{/rooms}]]";
-      contextPath = "[[@{/}]]";
+      moduleURL = "[[@{/admin/rooms}]]";
+      contextPath = "[[@{/admin/}]]";
     </script>
     <script th:src="@{/js/common_form.js}"></script>
     <script th:src="@{/js/room_form.js}"></script>

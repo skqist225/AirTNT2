@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin")
 @Transactional
 public class RoomAdminController {
     @Autowired
@@ -112,7 +112,7 @@ public class RoomAdminController {
 
     private String getRedirectURLtoAffectedRoom(Room room) {
         String name = room.getName();
-        return "redirect:/rooms/page/1?sortField=id&sortDir=asc&keyword=" + name;
+        return "redirect:/admin/rooms/page/1?sortField=id&sortDir=asc&keyword=" + name;
     }
 
     @GetMapping("/rooms/edit/{id}")
@@ -141,7 +141,7 @@ public class RoomAdminController {
 
         } catch (RoomNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
-            return "redirect:/rooms";
+            return "redirect:/admin/rooms";
         }
     }
 
@@ -152,14 +152,14 @@ public class RoomAdminController {
         String status = enable ? "enabled" : "disabled";
         String message = "The room ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message", message);
-        return "redirect:/rooms";
+        return "redirect:/admin/rooms";
     }
 
     @GetMapping("/rooms/delete/{id}")
     public String deleteRoom(@PathVariable("id") Integer id, RedirectAttributes ra) throws RoomNotFoundException {
         service.deleteRoom(id);
         ra.addFlashAttribute("message", "The room ID " + id + " has been deleted successully");
-        return "redirect:/rooms";
+        return "redirect:/admin/rooms";
     }
 
 }

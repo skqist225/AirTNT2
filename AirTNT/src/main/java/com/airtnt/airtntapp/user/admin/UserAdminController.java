@@ -94,7 +94,7 @@ public class UserAdminController {
 			@RequestParam("countrySelected") Integer countryId,
 			@RequestParam(name = "state", required = false) Integer stateId,
 			@RequestParam(name = "city", required = false) Integer cityId,
-			@RequestParam(name = "address", required = false) String address) throws IOException {
+			@RequestParam(name = "addresss", required = false) String address) throws IOException {
 		State state;
 		Country country;
 		City city;
@@ -119,7 +119,7 @@ public class UserAdminController {
 
 			User savedUser = service.save(user);
 
-			String uploadDir = "user-photos/" + savedUser.getId();
+			String uploadDir = "../user_images/" + savedUser.getId();
 
 			FileUploadUtil.cleanDir(uploadDir);
 			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -135,7 +135,7 @@ public class UserAdminController {
 
 	private String getRedirectURLtoAffectedUser(User user) {
 		String firstPartOfEmail = user.getEmail().split("@")[0];
-		return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
+		return "redirect:/admin/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
 	}
 
 	@GetMapping("/users/edit/{id}")
@@ -144,19 +144,26 @@ public class UserAdminController {
 		try {
 			List<Role> listRoles = service.listRoles();
 			List<Country> listCountries = service.listCountries();
-
+			
 			User user = service.get(id);
+			Address address = user.getAddress();
+			Integer countryId = address.getCountry()==null? null :address.getCountry().getId();
+			Integer stateId = address.getState()==null? null :address.getState().getId();
+			Integer cityId = address.getCity()==null? null :address.getCity().getId();
 			model.addAttribute("user", user);
 			model.addAttribute("listRoles", listRoles);
 			model.addAttribute("listCountries", listCountries);
 			model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
-			model.addAttribute("address", user.getAddress());
-
+			model.addAttribute("addresss", address);
+			model.addAttribute("countryId", countryId); 
+			model.addAttribute("stateId", stateId);
+			model.addAttribute("cityId", cityId);
+ 
 			return "users/user_form";
 
 		} catch (UserNotFoundException ex) {
 			ra.addFlashAttribute("message", ex.getMessage());
-			return "redirect:/users";
+			return "redirect:/admin/users";
 		}
 	}
 
@@ -167,7 +174,7 @@ public class UserAdminController {
 		String status = enable ? "enabled" : "disabled";
 		String message = "The user ID " + id + " has been " + status;
 		redirectAttributes.addFlashAttribute("message", message);
-		return "redirect:/users";
+		return "redirect:/admin/users";
 	}
 
 	@GetMapping("/users/delete/{id}")
@@ -178,7 +185,7 @@ public class UserAdminController {
 		} catch (UserNotFoundException ex) {
 			ra.addFlashAttribute("message", ex.getMessage());
 		}
-		return "redirect:/users";
+		return "redirect:/admin/users";
 	}
 
 	@GetMapping("/account")
@@ -195,13 +202,13 @@ public class UserAdminController {
 			model.addAttribute("listRoles", listRoles);
 			model.addAttribute("listCountries", listCountries);
 			model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
-			model.addAttribute("address", user.getAddress());
+			model.addAttribute("addresss", user.getAddress());
 
 			return "users/user_form";
 
 		} catch (UserNotFoundException ex) {
 			ra.addFlashAttribute("message", ex.getMessage());
-			return "redirect:/users";
+			return "redirect:/admin/users";
 		}
 	}
 }

@@ -11,7 +11,7 @@
       </div>
 
       <form
-        th:action="@{/users/save}"
+        th:action="@{/admin/users/save}"
         method="post"
         style="max-width: 700px; margin: 0 auto"
         enctype="multipart/form-data"
@@ -162,7 +162,7 @@
           <div class="form-group row">
             <label class="col-sm-4 col-form-label">Verified:</label>
             <div class="col-sm-8">
-              <input type="checkbox" th:field="*{verified}" class="m-2" />
+              <input type="checkbox" th:field="*{phoneVerified}" class="m-2" />
             </div>
           </div>
 
@@ -225,10 +225,10 @@
               <input
                 type="text"
                 class="form-control"
-                name="address"
+                name="addresss"
                 minlength="2"
                 maxlength="255"
-                th:value="${address.aprtNoAndStreet}"
+                th:value="${addresss.aprtNoAndStreet}"
               />
             </div>
           </div>
@@ -249,12 +249,15 @@
 
       <div th:replace="fragments::footer"></div>
     </div>
+    <script th:inline="javascript">
+      var countryIdLoad = [[${countryId}]];
+      var stateIdLoad = [[${stateId}]];
+      var cityIdLoad = [[${cityId}]];
+    </script>
     <script type="text/javascript">
-      stateIdLoad = [[${address.state.id}]];
-      cityIdLoad = [[${address.city.id}]];
       MAX_FILE_SIZE = 1024000;
-      moduleURL = "[[@{/users}]]";
-      contextPath = "[[@{/}]]";
+      moduleURL = "[[@{/admin/users}]]";
+      contextPath = "[[@{/admin/}]]";
     </script>
     <script th:src="@{/js/common_form.js}"></script>
     <script th:src="@{/js/user_form.js}"></script>
