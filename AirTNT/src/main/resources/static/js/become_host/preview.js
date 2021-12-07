@@ -82,8 +82,8 @@ async function nextPage() {
             bathroomCount: room.bathRoomNumber,
             accomodatesCount: room.guestNumber,
             bedCount: room.bedNumber,
-            currency: 2,
-            category: 1,
+            currency: 2, // chose currency
+            category: 1, // choose category
             roomGroup: room.roomGroup,
             roomType: room.roomType,
             description: room.descriptions[0] + ',' + room.descriptions[1],
@@ -91,8 +91,6 @@ async function nextPage() {
             longitude: room.longitude * 1,
             price: room.roomPricePerNight,
             priceType: 'PER_NIGHT',
-            minimumStay: 1,
-            stayType: 'DAY',
             host: hostName,
             privacyType: room.privacyType,
         };

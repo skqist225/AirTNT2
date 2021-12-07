@@ -39,7 +39,6 @@ import com.airtnt.entity.RoomPrivacy;
 import com.airtnt.entity.RoomType;
 import com.airtnt.entity.Rule;
 import com.airtnt.entity.State;
-import com.airtnt.entity.StayType;
 import com.airtnt.entity.User;
 import com.airtnt.airtntapp.booking.BookedDate;
 import com.airtnt.airtntapp.booking.BookingService;
@@ -170,7 +169,6 @@ public class RoomController {
 			images.add(new Image(payload.getImages()[i]));
 		}
 		PriceType pt = payload.getPriceType() == "PER_NIGHT" ? PriceType.PER_NIGHT : PriceType.PER_WEEK;
-		StayType st = payload.getStayType() == "DAY" ? StayType.DAY : StayType.WEEK;
 		Country country = new Country(payload.getCountry());
 
 		// check if state exist
@@ -195,7 +193,7 @@ public class RoomController {
 				.bathroomCount(payload.getBathroomCount()).bedCount(payload.getBedCount())
 				.bedroomCount(payload.getBedroomCount()).description(payload.getDescription()).amentities(amentities)
 				.images(images).latitude(payload.getLatitude()).longitude(payload.getLongitude())
-				.price(payload.getPrice()).priceType(pt).minimumStay(payload.getMinimumStay()).stayType(st).city(city)
+				.price(payload.getPrice()).priceType(pt).minimumStay(payload.getMinimumStay()).city(city)
 				.state(state).country(country).rules(rules).host(new User(payload.getHost()))
 				.roomGroup(new RoomGroup(payload.getRoomGroup())).roomType(new RoomType(payload.getRoomType()))
 				.host(new User(payload.getHost())).category(new Category(payload.getCategory()))

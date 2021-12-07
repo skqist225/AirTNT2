@@ -137,9 +137,6 @@ public class Room extends BaseEntity {
 	@Column(length = 20, nullable = false)
 	private PriceType priceType;
 
-	@Column(length = 5, nullable = false, columnDefinition = "INT DEFAULT 1")
-	private int minimumStay;
-
 	@ManyToOne
 	@JoinColumn(name = "host_id")
 	private User host;
