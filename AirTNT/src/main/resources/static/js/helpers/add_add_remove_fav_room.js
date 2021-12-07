@@ -21,8 +21,8 @@ function addClickEventForLoveButton(wishlistsArr = [], user = null) {
                 const { data } = await axios.get(getURL);
                 if (data === 'success') {
                     $('.room__likeBtn').each(function () {
-                        if ($(this).data('room-id') === roomId)
-                            $(this).children('svg').removeClass('like');
+                        if ($(this).data('room-id') * 1 === roomId * 1)
+                            $(this).children('.heartSvg').removeClass('like');
                     });
                     alertify.success(successMessage);
                 } else alertify.error(errorMessage);
@@ -34,8 +34,8 @@ function addClickEventForLoveButton(wishlistsArr = [], user = null) {
                 const { data } = await axios.get(getURL);
                 if (data === 'success') {
                     $('.room__likeBtn').each(function () {
-                        if ($(this).data('room-id') === roomId)
-                            $(this).children('svg').addClass('like');
+                        if ($(this).data('room-id') * 1 === roomId * 1)
+                            $(this).children('.heartSvg').addClass('like');
                     });
                     alertify.success(successMessage);
                 } else alertify.error(errorMessage);

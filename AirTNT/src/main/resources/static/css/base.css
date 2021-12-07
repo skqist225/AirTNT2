@@ -96,3 +96,40 @@ a {
 .heartSvg.like {
     fill: rgb(255, 56, 92) !important;
 }
+
+input[type='checkbox'] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -o-appearance: none;
+    outline: none;
+    content: none;
+}
+
+input[type='checkbox']:before {
+    font-family: 'FontAwesome';
+    content: '\f00c';
+    font-size: 13px;
+    border-radius: 4px;
+    color: transparent;
+    background: #fff;
+    display: block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #d3d6db;
+    margin-right: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input[type='checkbox']:checked:before {
+    background: #3ea8df;
+    color: rgba(255, 255, 255, 0.85);
+    border: 2px solid #3ea8df;
+    border-radius: 4px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}

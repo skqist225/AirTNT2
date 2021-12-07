@@ -2,12 +2,16 @@ package com.airtnt.airtntapp;
 
 import java.util.List;
 
+import com.airtnt.airtntapp.amentity.AmentityService;
 import com.airtnt.airtntapp.category.CategoryService;
+import com.airtnt.airtntapp.room.RoomPrivacyService;
 import com.airtnt.airtntapp.room.RoomService;
 import com.airtnt.airtntapp.user.UserService;
 import com.airtnt.airtntapp.user.admin.UserNotFoundException;
+import com.airtnt.entity.Amentity;
 import com.airtnt.entity.Category;
 import com.airtnt.entity.Room;
+import com.airtnt.entity.RoomPrivacy;
 import com.airtnt.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,12 @@ public class MainController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoomPrivacyService roomPrivacyService;
+
+    @Autowired
+    private AmentityService amentityService;
 
     @GetMapping("/")
     public String index(@Param("categoryId") Integer categoryId,
@@ -63,6 +73,22 @@ public class MainController {
             model.addAttribute("user", null);
         else
             model.addAttribute("user", user.getFullName());
+
+        float averageRoomPrice = 0;
+        if (rooms.size() > 0) {
+            for (Room room : rooms) {
+                averageRoomPrice += room.getPrice();
+            }
+            averageRoomPrice /= rooms.size();
+            model.addAttribute("averageRoomPrice", averageRoomPrice);
+        } else
+            model.addAttribute("averageRoomPrice", 0);
+
+        List<Amentity> amentities = amentityService.getAllAmentities();
+        model.addAttribute("amentities", amentities);
+
+        List<RoomPrivacy> roomPrivacies = roomPrivacyService.listAll();
+        model.addAttribute("roomPrivacies", roomPrivacies);
 
         return "index";
     }
