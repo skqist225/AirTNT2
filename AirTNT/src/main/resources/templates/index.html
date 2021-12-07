@@ -68,12 +68,12 @@
                         </th:block>
                     </div>
                     <div id="index__filter-container">
-                        <div>
+                        <!-- <div>
                             <input type="date" class="form-control" />
-                        </div>
+                        </div> -->
 
                         <div>
-                            <button class="filterButton">
+                            <button class="filterButton" onclick="displayEditThumbnailBox();">
                                 <span>
                                     <img
                                         th:src="@{/svg/filter.svg}"
@@ -86,7 +86,7 @@
                                     style="
                                         font-size: 14px;
                                         color: #222;
-                                        margin-right: 6px;
+                                        margin-left: 6px;
                                         display: inline-block;
                                     "
                                     >Bộ lọc</span
@@ -473,6 +473,20 @@
                     });
                 });
             });
+
+            function hideEditThumbnailBox() {
+                $('.radioThumbnail').each(function () {
+                    if ($(this).val() === thumbnail) {
+                        $(this).prop('checked', true);
+                    } else $(this).prop('checked', false);
+                });
+
+                $('#chooseRoomThumbnail').css('display', 'none');
+            }
+
+            function displayEditThumbnailBox() {
+                $('#chooseRoomThumbnail').css('display', 'block');
+            }
 
             function updateTextInput(val) {
                 $('#min-input__modify').val(seperateNumber(val));

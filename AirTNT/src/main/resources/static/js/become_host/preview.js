@@ -83,9 +83,8 @@ async function nextPage() {
             accomodatesCount: room.guestNumber,
             bedCount: room.bedNumber,
             currency: 2, // chose currency
-            category: 1, // choose category
+            category: room.category,
             roomGroup: room.roomGroup,
-            roomType: room.roomType,
             description: room.descriptions[0] + ',' + room.descriptions[1],
             latitude: room.latitude * 1,
             longitude: room.longitude * 1,
@@ -104,6 +103,7 @@ async function nextPage() {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        if (data) window.location.href = `${baseURL}${data}`;
+        console.log(data);
+        if (data) window.location.href = `${baseURL}room/${data}/publish-celebration`;
     }
 }

@@ -18,6 +18,14 @@
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
             rel="stylesheet"
         />
+        <link
+            rel="stylesheet"
+            href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"
+        />
 
         <link rel="stylesheet" th:href="@{/css/become_host/amentities.css}" />
         <link rel="stylesheet" th:href="@{/css/become_host/room_type.css}" />
@@ -59,20 +67,13 @@
                        "
                             style="text-decoration: none"
                         >
-                            <img
-                                th:src="@{/images/airtntlogo.png}"
-                                alt=""
-                                id="airTntLogo"
-                            />
+                            <img th:src="@{/images/airtntlogo.png}" alt="" id="airTntLogo" />
                         </a>
                     </div>
                 </div>
                 <div class="room-group__right">
                     <div class="room-group__right-first">
-                        <button
-                            class="become-a-host__right-cancelBtn"
-                            onclick="backtoHomePage();"
-                        >
+                        <button class="become-a-host__right-cancelBtn" onclick="backtoHomePage();">
                             <span style="font-weight: 500">Lưu và thoát</span>
                         </button>
                     </div>
@@ -90,8 +91,7 @@
                             </div>
                             <div class="flexCol">
                                 <div class="amentities__title">
-                                    Còn những tiện nghi yêu thích của khách sau
-                                    đây thì sao?
+                                    Còn những tiện nghi yêu thích của khách sau đây thì sao?
                                 </div>
                                 <div>
                                     <div
@@ -101,8 +101,8 @@
                             </div>
                             <div class="flexCol">
                                 <div class="amentities__title">
-                                    Bạn có tiện nghi nào trong số những tiện
-                                    nghi đảm bảo an toàn này không?
+                                    Bạn có tiện nghi nào trong số những tiện nghi đảm bảo an toàn
+                                    này không?
                                 </div>
                                 <div>
                                     <div
@@ -126,10 +126,7 @@
                                 >Quay lại</a
                             >
                         </div>
-                        <button
-                            class="become-a-host__right-startBtn"
-                            onclick="nextPage();"
-                        >
+                        <button class="become-a-host__right-startBtn" onclick="nextPage();">
                             <span style="font-weight: 500">Tiếp theo</span>
                         </button>
                     </div>
@@ -138,18 +135,13 @@
         </main>
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script
-            type="text/javascript"
-            th:src="@{/webjars/jquery/jquery.min.js}"
-        ></script>
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <script th:inline="javascript">
             /*<![CDATA[*/
             const baseURL = /*[[@{/}]]*/ 'default';
             /*]]>*/
         </script>
-        <script
-            type="text/javascript"
-            th:src="@{'/js/become_host/amentities.js'}"
-        ></script>
+        <script type="text/javascript" th:src="@{'/js/become_host/amentities.js'}"></script>
     </body>
 </html>

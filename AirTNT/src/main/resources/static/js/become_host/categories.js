@@ -2,9 +2,9 @@ $(document).ready(function () {
     const roomTypeBox = $('.room-type__box');
 
     if (localStorage.getItem('room')) {
-        const { roomType } = JSON.parse(localStorage.getItem('room'));
+        const { category } = JSON.parse(localStorage.getItem('room'));
         roomTypeBox.each(function () {
-            if ($(this).children('input').val() === roomType + '') {
+            if ($(this).children('input').val() === category + '') {
                 $(this).addClass('active');
             }
         });
@@ -26,19 +26,18 @@ function backtoHomePage() {
 }
 
 function nextPage() {
-    const chooseRoomType =
-        $('div.room-type__box').filter('.active').children('input').val() * 1;
+    const chooseRoomType = $('div.room-type__box').filter('.active').children('input').val() * 1;
 
     let room = {};
     if (!localStorage.getItem('room')) {
         room = {
-            roomType: chooseRoomType,
+            category: chooseRoomType,
         };
     } else {
         room = JSON.parse(localStorage.getItem('room'));
         room = {
             ...room,
-            roomType: chooseRoomType,
+            category: chooseRoomType,
         };
     }
     localStorage.setItem('room', JSON.stringify(room));

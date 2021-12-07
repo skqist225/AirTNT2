@@ -19,9 +19,9 @@ public class Room extends BaseEntity {
 	@Builder
 	public Room(int id, String name, Set<Image> images, String thumbnail, byte rating,
 			Country country, State state, City city, String street, int bedroomCount, int bathroomCount,
-			int accomodatesCount, int bedCount, RoomGroup roomGroup, RoomType roomType, Currency currency,
+			int accomodatesCount, int bedCount, RoomGroup roomGroup, Currency currency,
 			Category category, String description, Set<Amentity> amentities, float latitude, float longitude,
-			float price, RoomPrivacy privacyType, PriceType priceType, int minimumStay, User host,
+			float price, RoomPrivacy privacyType, PriceType priceType, User host,
 			Set<Rule> rules, boolean status) {
 		super(status);
 		this.name = name;
@@ -36,7 +36,6 @@ public class Room extends BaseEntity {
 		this.accomodatesCount = accomodatesCount;
 		this.bedCount = bedCount;
 		this.roomGroup = roomGroup;
-		this.roomType = roomType;
 		this.currency = currency;
 		this.category = category;
 		this.description = description;
@@ -46,7 +45,6 @@ public class Room extends BaseEntity {
 		this.price = price;
 		this.privacyType = privacyType;
 		this.priceType = priceType;
-		this.minimumStay = minimumStay;
 		this.host = host;
 		this.rules = rules;
 		this.street = street;
@@ -101,10 +99,6 @@ public class Room extends BaseEntity {
 	@JoinColumn(name = "room_group_id")
 	private RoomGroup roomGroup;
 
-	@ManyToOne
-	@JoinColumn(name = "room_type_id")
-	private RoomType roomType;
-
 	@OneToOne
 	@JoinColumn(name = "currency_id")
 	private Currency currency;
@@ -155,7 +149,7 @@ public class Room extends BaseEntity {
 				+ ", bathRoomCount=" + bathroomCount + ", accomodatesCount=" + accomodatesCount + ", bedCount="
 				+ bedCount + ", category=" + category + ", description=" + description + ", amentities=" + amentities
 				+ ", latitude=" + latitude + ", longtitude=" + longitude + ", price=" + price + ", priceType="
-				+ priceType + ", mininumStay=" + minimumStay + ", host=" + host + ", rules="
+				+ priceType + ", host=" + host + ", rules="
 				+ rules + "]";
 	}
 

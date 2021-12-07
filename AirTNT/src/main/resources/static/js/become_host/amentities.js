@@ -4,24 +4,19 @@ jQuery(document).ready(function () {
     const safeAmentities = $('.safeAmentities');
 
     if (localStorage.getItem('room')) {
-        const { prominentAmentity, favoriteAmentity, safeAmentity } =
-            JSON.parse(localStorage.getItem('room'));
+        const { prominentAmentity, favoriteAmentity, safeAmentity } = JSON.parse(
+            localStorage.getItem('room')
+        );
 
         prominentAmentities.each(function () {
-            if (
-                $(this).children('input').first().val() ===
-                prominentAmentity + ''
-            ) {
+            if ($(this).children('input').first().val() === prominentAmentity + '') {
                 $(this).addClass('choosen');
                 return false;
             }
         });
 
         favoriteAmentities.each(function () {
-            if (
-                $(this).children('input').first().val() ===
-                favoriteAmentity + ''
-            ) {
+            if ($(this).children('input').first().val() === favoriteAmentity + '') {
                 $(this).addClass('choosen');
                 return false;
             }
@@ -70,11 +65,7 @@ function backtoHomePage() {
 
 function nextPage() {
     const prominentAmentity =
-        $('.prominentAmentities')
-            .filter('.choosen')
-            .children('input')
-            .first()
-            .val() * 1;
+        $('.prominentAmentities').filter('.choosen').children('input').first().val() * 1;
     const prominentAmentityName = $('.prominentAmentities')
         .filter('.choosen')
         .children('input[class="amentityName"]')
@@ -87,11 +78,7 @@ function nextPage() {
         .val();
 
     const favoriteAmentity =
-        $('.favoriteAmentities')
-            .filter('.choosen')
-            .children('input')
-            .first()
-            .val() * 1;
+        $('.favoriteAmentities').filter('.choosen').children('input').first().val() * 1;
 
     const favoriteAmentityImageName = $('.favoriteAmentities')
         .filter('.choosen')
@@ -104,11 +91,7 @@ function nextPage() {
         .children('input[class="amentityName"]')
         .val();
     const safeAmentity =
-        $('.safeAmentities')
-            .filter('.choosen')
-            .children('input')
-            .first()
-            .val() * 1;
+        $('.safeAmentities').filter('.choosen').children('input').first().val() * 1;
 
     const safeAmentityImageName = $('.safeAmentities')
         .filter('.choosen')
@@ -120,6 +103,11 @@ function nextPage() {
         .filter('.choosen')
         .children('input[class="amentityName"]')
         .val();
+
+    if (isNaN(prominentAmentity) || isNaN(favoriteAmentity) || isNaN(safeAmentity)) {
+        alertify.error('Vui lòng chọn tiện ích trước khi tiếp tục!');
+        return;
+    }
 
     let room = {};
     if (!localStorage.getItem('room')) {

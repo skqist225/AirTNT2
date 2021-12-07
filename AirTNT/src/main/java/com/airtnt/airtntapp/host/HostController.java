@@ -3,15 +3,15 @@ package com.airtnt.airtntapp.host;
 import java.util.List;
 
 import com.airtnt.airtntapp.amentity.AmentityService;
+import com.airtnt.airtntapp.category.CategoryService;
 import com.airtnt.airtntapp.country.CountryService;
 import com.airtnt.airtntapp.privacy.PrivacyTypeService;
 import com.airtnt.airtntapp.room.RoomGroupService;
-import com.airtnt.airtntapp.room.RoomTypeService;
 import com.airtnt.airtntapp.user.UserService;
 import com.airtnt.entity.Amentity;
+import com.airtnt.entity.Category;
 import com.airtnt.entity.RoomGroup;
 import com.airtnt.entity.RoomPrivacy;
-import com.airtnt.entity.RoomType;
 import com.airtnt.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class HostController {
     RoomGroupService roomGroupService;
 
     @Autowired
-    RoomTypeService roomTypeService;
+    CategoryService categoryService;
 
     @Autowired
     UserService userService;
@@ -58,9 +58,9 @@ public class HostController {
 
     @GetMapping("property-type")
     public String roomTypeSelect(Model model) {
-        List<RoomType> roomTypes = roomTypeService.getRoomTypes();
-        model.addAttribute("roomTypes", roomTypes);
-        return "become_host/property_type";
+        List<Category> categories = categoryService.listAll();
+        model.addAttribute("categories", categories);
+        return "become_host/categories";
     }
 
     @GetMapping("privacy-type")
