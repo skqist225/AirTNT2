@@ -21,7 +21,7 @@ public class Room extends BaseEntity {
 			Country country, State state, City city, String street, int bedroomCount, int bathroomCount,
 			int accomodatesCount, int bedCount, RoomGroup roomGroup, RoomType roomType, Currency currency,
 			Category category, String description, Set<Amentity> amentities, float latitude, float longitude,
-			float price, RoomPrivacy privacyType, PriceType priceType, int minimumStay, StayType stayType, User host,
+			float price, RoomPrivacy privacyType, PriceType priceType, int minimumStay, User host,
 			Set<Rule> rules, boolean status) {
 		super(status);
 		this.name = name;
@@ -47,7 +47,6 @@ public class Room extends BaseEntity {
 		this.privacyType = privacyType;
 		this.priceType = priceType;
 		this.minimumStay = minimumStay;
-		this.stayType = stayType;
 		this.host = host;
 		this.rules = rules;
 		this.street = street;
@@ -141,10 +140,6 @@ public class Room extends BaseEntity {
 	@Column(length = 5, nullable = false, columnDefinition = "INT DEFAULT 1")
 	private int minimumStay;
 
-	@Enumerated(EnumType.STRING)
-	@Column(length = 20, nullable = false)
-	private StayType stayType;
-
 	@ManyToOne
 	@JoinColumn(name = "host_id")
 	private User host;
@@ -163,16 +158,16 @@ public class Room extends BaseEntity {
 				+ ", bathRoomCount=" + bathroomCount + ", accomodatesCount=" + accomodatesCount + ", bedCount="
 				+ bedCount + ", category=" + category + ", description=" + description + ", amentities=" + amentities
 				+ ", latitude=" + latitude + ", longtitude=" + longitude + ", price=" + price + ", priceType="
-				+ priceType + ", mininumStay=" + minimumStay + ", stayType=" + stayType + ", host=" + host + ", rules="
+				+ priceType + ", mininumStay=" + minimumStay + ", host=" + host + ", rules="
 				+ rules + "]";
 	}
 
 	@Transient
 	public String renderThumbnailImage() {
-		if (!this.thumbnail.isEmpty())
+		if (this.thumbnail != null)
 			return "/airtnt/room_images/" + this.host.getEmail() + "/" + this.getId() + "/" + this.thumbnail;
 		else
-			return "images/airtntlogo.png";
+			return "/airtnt/images/airtntlogo.png";
 	}
 
 	@Transient

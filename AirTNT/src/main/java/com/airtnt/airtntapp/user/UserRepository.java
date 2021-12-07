@@ -1,6 +1,5 @@
 package com.airtnt.airtntapp.user;
 
-import com.airtnt.entity.Address;
 import com.airtnt.entity.User;
 
 import org.springframework.data.domain.Page;

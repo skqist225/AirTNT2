@@ -413,12 +413,13 @@
         </script>
         <script>
             jQuery(document).ready(function () {
+                $('.listings__minus-btn').attr('disabled', true);
                 const maxModifyInput = $('#max-input__modify');
                 const minModifyInput = $('#min-input__modify');
                 const roomPriceRange = $('#roomPriceRange');
 
-                maxModifyInput.val(seperateNumber(roomPriceRange.attr('max') * 1));
-                minModifyInput.val(seperateNumber(roomPriceRange.attr('min') * 1));
+                maxModifyInput.val(roomPriceRange.attr('max'));
+                minModifyInput.val(roomPriceRange.attr('min') * 1);
 
                 maxModifyInput.on('change', function () {
                     roomPriceRange.attr('max', $(this).val() * 1);
@@ -426,6 +427,50 @@
 
                 minModifyInput.on('change', function () {
                     roomPriceRange.attr('min', $(this).val() * 1);
+                });
+
+                $('.incAndDecBtn').each(function () {
+                    $(this).click(function () {
+                        const spanInfoTag = $(this).siblings(`#${$(this).data('edit')}`);
+                        let spanValue = spanInfoTag.text() * 1;
+                        const dataFunction = $(this).data('function');
+                        const deleteButton = $('.deleteBtn.' + $(this).data('trigger'));
+                        const applyButton = $('.applyBtn.' + $(this).data('trigger'));
+                        const self = $(this);
+
+                        if (dataFunction === 'dec') {
+                            if (spanValue > 0) {
+                                if (spanValue === 1) $(this).attr('disabled', true);
+                                spanInfoTag.text(--spanValue);
+                            }
+                            let countZero = 0;
+                            if (spanValue === 0)
+                                $('.listings__minus-btn').each(function () {
+                                    if (!$(this).is(self)) {
+                                        const spanValue =
+                                            $(this)
+                                                .siblings(`#${$(this).data('edit')}`)
+                                                .text() * 1;
+                                        if (spanValue === 0) countZero++;
+                                    }
+                                });
+
+                            if (countZero === $('.listings__minus-btn').length - 1)
+                                deleteButton.attr('disabled', true);
+                        }
+
+                        if (dataFunction === 'inc') {
+                            if (spanValue === 0)
+                                $(this)
+                                    .siblings(`.listings__minus-btn.incAndDecBtn`)
+                                    .removeAttr('disabled');
+                            spanInfoTag.text(++spanValue);
+
+                            if (spanValue > 0) deleteButton.removeAttr('disabled');
+                        }
+
+                        // if()
+                    });
                 });
             });
 
