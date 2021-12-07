@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class UserService {
     public static final int USERS_PER_PAGE = 4;
 
@@ -140,9 +141,9 @@ public class UserService {
         }
     }
 
-    public void delete(Integer id) throws UserNotFoundException {
+    public void delete(Integer id) throws UserNotFoundException { 
         Long countById = userRepository.countById(id);
-        if ((countById == null || countById == 0)) {
+        if ((countById == null || countById == 0)) { 
             throw new UserNotFoundException("Could not find any user with ID " + id);
         }
 
@@ -150,7 +151,7 @@ public class UserService {
     }
 
     public void updateUserEnabledStatus(Integer id, boolean enabled) {
-        userRepository.updateStatus(id, enabled);
+        userRepository.updateStatus(id, enabled); 
     }
 
     public User findById(Integer id) {

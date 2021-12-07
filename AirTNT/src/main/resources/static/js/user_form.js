@@ -6,6 +6,7 @@ $(document).ready(async function () {
   dropdownCountries = $("#countries");
   dropdownStates = $("#states");
   dropdownCities = $("#cities");
+  if (countryIdLoad) dropdownCountries.val(countryIdLoad).change();
   await getStatesByCountry();
   if (stateIdLoad) dropdownStates.val(stateIdLoad).change();
   await getCitiesByStates();

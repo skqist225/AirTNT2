@@ -10,23 +10,23 @@
         
         <div>
             <h1>Manage Users</h1>
-			<a th:href="@{/users/new}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
+			<a th:href="@{/admin/users/new}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
 		</div>
 
-        <div th:replace="fragments :: search_form_and_message('/users/page/1')"></div>
+        <div th:replace="fragments :: search_form_and_message('/admin/users/page/1')"></div>
 
         <div class="full-details table-responsive-xl">
             <table class="table table-bordered table-striped table-hover">
                 <thead class="thead-dark">
                     <th class="hideable-column">
-                        <th th:replace="fragments :: column_link('/users', 'id', 'User ID', 'tag')"></th>
+                        <th th:replace="fragments :: column_link('/admin/users', 'id', 'User ID', 'tag')"></th>
                     </th>
                     <th>Avatar</th>
                     <th class="hideable-column">
-                        <th th:replace="fragments :: column_link('/users', 'email', 'Email', 'tag')"></th>
+                        <th th:replace="fragments :: column_link('/admin/users', 'email', 'Email', 'tag')"></th>
                     </th>
-                    <th th:replace="fragments :: column_link('/users', 'firstName', 'First Name', 'none')"></th>
-                    <th th:replace="fragments :: column_link('/users', 'lastName', 'Last Name', 'none')"></th>
+                    <th th:replace="fragments :: column_link('/admin/users', 'firstName', 'First Name', 'none')"></th>
+                    <th th:replace="fragments :: column_link('/admin/users', 'lastName', 'Last Name', 'none')"></th>
                     <th class="hideable-column">
                         Phone Number
                     </th>
@@ -48,12 +48,12 @@
                         <td>[[${user.sex}]]</td>
                         
                         <td>
-                            <div th:replace="fragments::status(${user.status}, 'user', '/users/'+${user.id})"></div>
+                            <div th:replace="fragments::status(${user.status}, 'user', '/admin/users/'+${user.id})"></div>
                         </td>
                         <td>
-                            <div th:replace="fragments::edit('user', '/users/edit/' + ${user.id})"></div>
+                            <div th:replace="fragments::edit('user', '/admin/users/edit/' + ${user.id})"></div>
                             &nbsp;
-                            <div th:replace="fragments::delete('user', '/users/delete/' + ${user.id}, true, ${user.id})"></div>
+                            <div th:replace="fragments::delete('user', '/admin/users/delete/' + ${user.id}, true, ${user.id})"></div>
                         </td>
                     </tr>
 
@@ -61,7 +61,7 @@
             </table>
         </div>
 
-        <div th:replace="fragments :: pagination('/users', 'users')"></div>
+        <div th:replace="fragments :: pagination('/admin/users', 'admin/users')"></div>
 		
 		<div th:replace="fragments :: confirm_modal"></div>
 
@@ -72,7 +72,8 @@
 			$(".link-delete").on("click", function(e){
 				e.preventDefault();
 				link = $(this);
-				userId = link.attr("userId");
+				userId = link.attr("entityId");
+                console.log(userId);
 				$("#yesButton").attr("href", link.attr("href"));
 				$("#confirmText").text("Are you sure you want to delete this user ID " + userId + "?");
 				$("#confirmModal").modal();
