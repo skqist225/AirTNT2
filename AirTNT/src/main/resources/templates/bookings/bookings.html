@@ -49,11 +49,29 @@
           <tbody>
             <tr th:each="booking : ${listBookings}">
               <td class="hideable-column">[[${booking.id}]]</td>
-              <td class="hideable-column">[[${booking.customer.fullName}]]</td>
-              <td class="hideable-column">[[${booking.room.name}]]</td>
-              <td>[[${booking.bookingDate}]]</td>
-              <td class="hideable-column">[[${booking.checkinDate}]]</td>
-              <td>[[${booking.checkoutDate}]]</td>
+              <td class="hideable-column">
+                <image
+                  th:src="@{${booking.customer.avatarPath}}"
+                  style="width: 50px; height: 50px"
+                ></image>
+                [[${booking.customer.fullName}]]
+              </td>
+              <td class="hideable-column">
+                <image
+                  th:src="${booking.room.renderThumbnailImage}"
+                  style="width: 50px; height: 50px"
+                ></image
+                >[[${booking.room.name}]]
+              </td>
+              <td
+                th:text="${#temporals.format(booking.bookingDate, 'dd-MM-yyyy')}"
+              ></td>
+              <td
+                th:text="${#dates.format(booking.checkinDate, 'dd-MM-yyyy')}"
+              ></td>
+              <td
+                th:text="${#dates.format(booking.checkoutDate, 'dd-MM-yyyy')}"
+              ></td>
               <td>[[${booking.totalFee}]]</td>
               <td>[[${booking.Complete}]]</td>
               <td>[[${booking.Refund}]]</td>

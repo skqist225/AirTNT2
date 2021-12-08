@@ -39,7 +39,7 @@
                         <td class="hideable-column">[[${user.id}]]</td>
                         <td>
                             <span th:if="${user.avatar == null}" class="fas fa-portrait fa-3x icon-silver"></span>
-                            <img th:if="${user.avatar != null}" th:src="@{${user.avatarPath}}" style="width: 100px;"/>
+                            <img th:if="${user.avatar != null}" th:src="@{${user.avatarPath}}" style="width: 50px;height:50px"/>
                         </td>
                         <td class="hideable-column">[[${user.email}]]</td>
                         <td>[[${user.firstName}]]</td>

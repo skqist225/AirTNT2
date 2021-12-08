@@ -45,4 +45,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer>, JpaSpecifi
         @Modifying
         public void updateStatus(Integer id, boolean status);
 
+        @Query("SELECT count(*) From Room r")
+        public Integer getNumberOfRoom();
+
 }

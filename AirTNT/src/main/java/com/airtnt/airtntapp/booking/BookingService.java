@@ -244,4 +244,28 @@ public class BookingService {
 			throw new BookingNotFoundException("could not find booking with id: " + id); 
 		}
 	}
+
+    public Integer getNumberOfBooking() {
+        return bookingRepository.getNumberOfBooking();
+    }
+
+    public Integer getTotalRevenue() {
+        return bookingRepository.getTotalRevenue();
+    }
+
+    public Integer getNumberOfBookingInLastMonth() {
+        return bookingRepository.getNumberOfBookingInLastMonth();
+    }
+
+    public Integer getTotalRevenueOfBookingInLastMonth() {
+        return bookingRepository.getTotalRevenueOfBookingInLastMonth();
+    }
+
+    public Integer getRevenueInSpecificMonthYear(Integer month, Integer year) {
+        return bookingRepository.getRevenueInSpecificMonthYear(month, year);
+    }
+
+    public Integer getRevenueInSpecificYear(Integer year) {
+        return bookingRepository.getRevenueInSpecificYear(year);
+    }
 }

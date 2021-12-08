@@ -54,4 +54,22 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
 
         @Query("SELECT b FROM Booking b WHERE CONCAT(b.customer.firstName, '',b.customer.lastName, '' , b.room.name) LIKE %?1%")
         public Page<Booking> findAllAdmin(String keyword, Pageable pageable);
+
+        @Query("SELECT count(*) FROM Booking b")
+        public Integer getNumberOfBooking();
+
+        @Query("SELECT sum(totalFee) FROM Booking b")
+        public Integer getTotalRevenue();
+
+        @Query(value="SELECT count(*) FROM bookings b WHERE YEAR(b.booking_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(b.booking_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", nativeQuery=true)
+        public Integer getNumberOfBookingInLastMonth();
+
+        @Query(value="SELECT sum(total_fee) FROM bookings b WHERE YEAR(b.booking_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(b.booking_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", nativeQuery=true)
+        public Integer getTotalRevenueOfBookingInLastMonth();
+
+        @Query("SELECT sum(totalFee) FROM Booking b WHERE YEAR(b.bookingDate) = :year and MONTH(b.bookingDate) = :month")
+        public Integer getRevenueInSpecificMonthYear(Integer month, Integer year);
+
+        @Query("SELECT sum(totalFee) FROM Booking b WHERE YEAR(b.bookingDate) = :year")
+        public Integer getRevenueInSpecificYear(Integer year);
 }

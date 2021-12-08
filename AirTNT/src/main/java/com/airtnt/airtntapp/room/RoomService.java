@@ -337,4 +337,8 @@ public class RoomService {
 		roomRepository.deleteById(id);
 	}
 
+	public Integer getNumberOfRoom(){
+		return roomRepository.getNumberOfRoom();
+	}
+
 }
