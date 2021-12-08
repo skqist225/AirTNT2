@@ -46,7 +46,6 @@ public class Room extends BaseEntity {
 		this.price = price;
 		this.privacyType = privacyType;
 		this.priceType = priceType;
-		this.minimumStay = minimumStay;
 		this.host = host;
 		this.rules = rules;
 		this.street = street;
@@ -73,7 +72,7 @@ public class Room extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "country_id")
-	private Country country;
+	private Country country;  
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "state_id")
@@ -155,7 +154,7 @@ public class Room extends BaseEntity {
 				+ ", bathRoomCount=" + bathroomCount + ", accomodatesCount=" + accomodatesCount + ", bedCount="
 				+ bedCount + ", category=" + category + ", description=" + description + ", amentities=" + amentities
 				+ ", latitude=" + latitude + ", longtitude=" + longitude + ", price=" + price + ", priceType="
-				+ priceType + ", mininumStay=" + minimumStay + ", host=" + host + ", rules="
+				+ priceType + ", host=" + host + ", rules="
 				+ rules + "]";
 	}
 

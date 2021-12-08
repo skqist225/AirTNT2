@@ -67,9 +67,6 @@ function addState() {
   $.ajax({
     type: "POST",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
     data: JSON.stringify(jsonData),
     contentType: "application/json",
   }).done(function (stateId) {
@@ -109,9 +106,6 @@ function deleteState() {
   $.ajax({
     type: "DELETE",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
   })
     .done(function () {
       $("#dropDownStates option[value='" + stateId + "']").remove();
@@ -154,9 +148,6 @@ function updateState() {
   $.ajax({
     type: "POST",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
     data: JSON.stringify(jsonData),
     contentType: "application/json",
   })
@@ -226,5 +217,6 @@ function changeFormStateToSelectedState() {
 }
 
 function selectNewlyAddedState(stateId, stateName) {
+  $("<option>").val(stateId).text(stateName).appendTo(dropDownStates);
   dropDownStates.val(stateId).change();
 }

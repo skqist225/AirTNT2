@@ -30,13 +30,14 @@ public class CityRestControler {
     };
 
     @PostMapping("/cities/save")
-    public City save(@RequestBody City city) {
-        return repo.save(city);
+    public String save(@RequestBody City city) {
+        City savedCity = repo.save(city);
+        return String.valueOf(savedCity.getId());
     }
 
     @DeleteMapping("/cities/delete/{id}")
     public void delete(@PathVariable Integer id) {
-        repo.deleteById(id);
+        repo.deleteById(id); 
     }
 
     @PostMapping("/cities/check_name")

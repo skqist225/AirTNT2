@@ -8,12 +8,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
 
 import com.airtnt.entity.Booking;
 import com.airtnt.entity.Room;
 import com.airtnt.entity.User;
+import com.airtnt.entity.Exception.BookingNotFoundException;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 public class BookingService {
 
     public final int MAX_BOOKING_PER_FETCH_BY_HOST = 10;
+    public final int BOOKINGS_PER_PAGE = 10;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -219,4 +222,26 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
+
+    public Page<Booking> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
+		Sort sort = Sort.by(sortField);
+
+		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+
+		Pageable pageable = PageRequest.of(pageNum - 1, BOOKINGS_PER_PAGE, sort);
+
+		if (keyword != null) {
+			return bookingRepository.findAllAdmin(keyword, pageable);
+		}
+
+		return bookingRepository.findAll(pageable);
+	}
+
+    public Booking getById(int id) throws BookingNotFoundException {
+		try {
+			return bookingRepository.getById(id);
+		} catch (NoSuchElementException ex) {
+			throw new BookingNotFoundException("could not find booking with id: " + id); 
+		}
+	}
 }

@@ -82,9 +82,6 @@ function deleteAmentity() {
   $.ajax({
     type: "DELETE",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
   })
     .done(function () {
       $("#dropDownAmentities option[value='" + amentityId + "']").remove();
@@ -120,9 +117,6 @@ async function updateAmentity() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: formData,
       processData: false,
       contentType: false,
@@ -168,9 +162,6 @@ async function addAmentity() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: formData,
       processData: false,
       contentType: false,
@@ -225,7 +216,7 @@ function changeFormAmentityToSelectedAmentity() {
   url = contextPath + "amentities/" + amentityId;
   $.get(url, function (amentity) {
     fieldAmentityName.val(amentity.name);
-    fieldAmentityImage.attr("src", contextPath + amentity.iconImagePath);
+    fieldAmentityImage.attr("src", amentity.iconImagePath1);
     fieldAmentityStatus.prop("checked", amentity.status);
     fieldAmentityDescription.val(amentity.description);
     fieldAmentityCategory.val(amentity.amentityCategory.id).change();
@@ -266,7 +257,7 @@ function showToastMessage(message) {
 async function checkNameUnique(id, name) {
   url = contextPath + "amentities/check_name";
 
-  params = { id: id, name: name, _csrf: csrfValue };
+  params = { id: id, name: name };
 
   let value = false;
   await $.post(url, params, function (response) {

@@ -133,7 +133,7 @@ public class BookingController {
         else
             redirectAttributes.addAttribute("approveMessage", "Duyệt lịch đặt phòng thất bại");
 
-        return "redirect:/book/listings/1";
+        return "redirect:/book/listings/1"; 
     }
 
 }

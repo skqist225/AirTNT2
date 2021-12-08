@@ -60,9 +60,6 @@ function deleteCategory() {
   $.ajax({
     type: "DELETE",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
   })
     .done(function () {
       $("#dropDownCategories option[value='" + categoryId + "']").remove();
@@ -92,9 +89,6 @@ function updateCategory() {
   $.ajax({
     type: "POST",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
     data: formData,
     processData: false,
     contentType: false,
@@ -136,9 +130,6 @@ function addCategory() {
   $.ajax({
     type: "POST",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
     data: formData,
     processData: false,
     contentType: false,
@@ -191,7 +182,7 @@ function changeFormCategoryToSelectedCategory() {
   url = contextPath + "categories/" + categoryId;
   $.get(url, function (category) {
     fieldCategoriesName.val(category.name);
-    fieldCategoriesImage.attr("src", contextPath + category.iconPath);
+    fieldCategoriesImage.attr("src", category.iconPath);
     fieldCategoriesStatus.prop("checked", category.status);
   })
     .done(function () {})
@@ -201,6 +192,7 @@ function changeFormCategoryToSelectedCategory() {
 function loadCategories() {
   url = contextPath + "categories/list";
   $.get(url, function (responseJSON) {
+    console.log(responseJSON);
     dropDownCategories.empty();
     $.each(responseJSON, function (index, category) {
       $("<option>")

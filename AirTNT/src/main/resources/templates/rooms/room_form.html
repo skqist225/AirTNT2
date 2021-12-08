@@ -35,6 +35,26 @@
           </div>
 
           <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Thumbnail:</label>
+            <div class="col-sm-8">
+              <!-- <input type="hidden" th:field="*{thumbnail}" /> -->
+              <input
+                type="file"
+                id="fileImage"
+                name="image"
+                accept="image/png, image/jpeg"
+                class="mb-2"
+              />
+              <img
+                id="thumbnail"
+                alt="Photos preview"
+                th:src="${room.renderThumbnailImage}"
+                class="img-fluid"
+              />
+            </div>
+          </div>
+
+          <div class="form-group row">
             <label class="col-sm-4 col-form-label">Description:</label>
             <div class="col-sm-8">
               <textarea
@@ -77,6 +97,34 @@
           </div>
 
           <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Room Group:</label>
+            <div class="col-sm-8">
+              <select th:field="*{roomGroup}" class="form-control" required>
+                <th:block th:each="roomG : ${listRoomGroups}">
+                  <option th:value="${roomG.id}">
+                    <small>[[${roomG.name}]]</small>
+                    <br />
+                  </option>
+                </th:block>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Room Privacy:</label>
+            <div class="col-sm-8">
+              <select th:field="*{privacyType}" class="form-control" required>
+                <th:block th:each="privacyT : ${listPrivacyTypes}">
+                  <option th:value="${privacyT.id}">
+                    <small>[[${privacyT.name}]]</small>
+                    <br />
+                  </option>
+                </th:block>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
             <label class="col-sm-4 col-form-label">Country:</label>
             <div class="col-sm-8">
               <select th:field="*{country}" class="form-control" required>
@@ -101,6 +149,20 @@
             <label class="col-sm-4 col-form-label">City:</label>
             <div class="col-sm-8">
               <select th:field="*{city}" class="form-control"></select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Street:</label>
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                th:field="*{street}"
+                minlength="2"
+                maxlength="512"
+                required
+              />
             </div>
           </div>
 
@@ -224,28 +286,6 @@
               <select class="form-control" th:field="*{priceType}" required>
                 <option value="PER_NIGHT">PER NIGHT</option>
                 <option value="PER_WEEK">PER WEEK</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-form-label col-sm-4">Minimum Stay</label>
-            <div class="col-sm-8">
-              <input
-                type="number"
-                class="form-control"
-                th:field="*{minimumStay}"
-                min="0"
-              />
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-form-label col-sm-4">Stay Type</label>
-            <div class="col-sm-8">
-              <select class="form-control" th:field="*{stayType}" required>
-                <option value="DAY">DAY</option>
-                <option value="WEEK">WEEK</option>
               </select>
             </div>
           </div>

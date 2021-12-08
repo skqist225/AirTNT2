@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class RoomTypeService {
     @Autowired
     RoomTypeRepository roomGroupRepository;
-
+ 
     public List<RoomType> getRoomTypes() {
         List<RoomType> roomTypes = new ArrayList<>();
         Iterator<RoomType> iterator = roomGroupRepository.findAll().iterator();
@@ -24,5 +24,9 @@ public class RoomTypeService {
         }
 
         return roomTypes;
+    }
+
+    public List<RoomType> listAll(){
+        return (List<RoomType>) roomGroupRepository.findAll();
     }
 }

@@ -57,9 +57,6 @@ function deleteCountry() {
   $.ajax({
     type: "DELETE",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
   })
     .done(function () {
       $("#dropDownCountries option[value='" + countryId + "']").remove();
@@ -90,9 +87,6 @@ async function updateCountry() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: formData,
       processData: false,
       contentType: false,
@@ -137,9 +131,6 @@ async function addCountry() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: formData,
       processData: false,
       contentType: false,
@@ -222,7 +213,7 @@ function loadCountries() {
 async function checkNameCountryUnique(id, name) {
   url = contextPath + "countries/check_name";
 
-  params = { id: id, name: name, _csrf: csrfValue };
+  params = { id: id, name: name };
 
   let value = false;
   await $.post(url, params, function (response) {

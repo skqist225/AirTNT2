@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,17 +26,18 @@ public class Category extends BaseEntity {
 
 	@Builder.Default
 	@OneToMany(mappedBy = "category")
+	@JsonIgnore
 	private Set<Room> room = new HashSet<>();
 
 	public Category(int id) {
 		super(id);
-	}
+	} 
 
 	@Transient
 	public String getIconPath() {
 		return "/airtnt/category_images/" + this.icon;
 	}
-
+  
 	public Category(String name) {
 		this.name = name;
 	}

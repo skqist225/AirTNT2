@@ -10,11 +10,13 @@ import com.airtnt.entity.Room;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, Integer> {
+public interface BookingRepository extends JpaRepository<Booking, Integer>{
 
         public Booking findByCheckinDateAndCheckoutDate(Date checkinDate, Date checkoutDate);
 
@@ -48,4 +50,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
         @Query("SELECT b FROM Booking b WHERE b.room.id IN (:roomIds) AND b.id = :bookingId")
         public Page<Booking> getBookingsByRooms(Integer[] roomIds, Integer bookingId, Pageable pageable);
 
+        //admin -----------------------------
+
+        @Query("SELECT b FROM Booking b WHERE CONCAT(b.customer.firstName, '',b.customer.lastName, '' , b.room.name) LIKE %?1%")
+        public Page<Booking> findAllAdmin(String keyword, Pageable pageable);
 }

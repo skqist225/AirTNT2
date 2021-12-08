@@ -77,9 +77,6 @@ function deleteRule() {
   $.ajax({
     type: "DELETE",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
   })
     .done(function () {
       $("#dropDownRules option[value='" + RuleId + "']").remove();
@@ -111,9 +108,6 @@ async function updateRule() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: formData,
       processData: false,
       contentType: false,
@@ -159,9 +153,6 @@ async function addRule() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: formData,
       processData: false,
       contentType: false,
@@ -214,7 +205,7 @@ function changeFormRuleToSelectedRule() {
   url = contextPath + "rules/" + RuleId;
   $.get(url, function (Rule) {
     fieldRuleName.val(Rule.title);
-    fieldRuleImage.attr("src", contextPath + Rule.iconPath);
+    fieldRuleImage.attr("src", Rule.iconPath1);
     fieldRuleStatus.prop("checked", Rule.status);
   })
     .done(function () {})
@@ -243,7 +234,7 @@ function loadRules() {
 async function checkNameRuleUnique(id, name) {
   url = contextPath + "rules/check_name";
 
-  params = { id: id, name: name, _csrf: csrfValue };
+  params = { id: id, name: name };
 
   let value = false;
   await $.post(url, params, function (response) {

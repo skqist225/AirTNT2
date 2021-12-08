@@ -1,7 +1,9 @@
 package com.airtnt.airtntapp.room;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.airtnt.airtntapp.FileUploadUtil;
 import com.airtnt.airtntapp.amentity.AmentityService;
 import com.airtnt.airtntapp.category.CategoryService;
 import com.airtnt.airtntapp.country.CountryService;
@@ -14,6 +16,9 @@ import com.airtnt.entity.Category;
 import com.airtnt.entity.Country;
 import com.airtnt.entity.Currency;
 import com.airtnt.entity.Room;
+import com.airtnt.entity.RoomGroup;
+import com.airtnt.entity.RoomPrivacy;
+import com.airtnt.entity.RoomType;
 import com.airtnt.entity.Rule;
 import com.airtnt.entity.User;
 
@@ -23,10 +28,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -47,6 +55,11 @@ public class RoomAdminController {
     AmentityService amentityService;
     @Autowired
     RuleService ruleService;
+    @Autowired
+    RoomGroupService roomGroupService;
+    @Autowired
+    RoomPrivacyService roomPrivacyService;
+    
 
     @GetMapping("/rooms")
     public String listFirstPage(Model model) {
@@ -89,12 +102,16 @@ public class RoomAdminController {
         List<Country> listCountries = countryService.listAll();
         List<Rule> listRules = ruleService.listAll();
         List<Amentity> listAmentities = amentityService.listAll();
-        model.addAttribute("listRules", listRules);
+        List<RoomGroup> listRoomGroups = roomGroupService.listAll();
+        List<RoomPrivacy> listPrivacyTypes = roomPrivacyService.listAll();
+        model.addAttribute("listRules", listRules); 
         model.addAttribute("listAmentities", listAmentities);
         model.addAttribute("listHosts", listUsers);
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("listCurrencies", listCurrencies);
         model.addAttribute("listCountries", listCountries);
+        model.addAttribute("listRoomGroups", listRoomGroups);
+        model.addAttribute("listPrivacyTypes", listPrivacyTypes); 
 
         Room room = new Room();
         model.addAttribute("room", room);
@@ -104,8 +121,27 @@ public class RoomAdminController {
     }
 
     @PostMapping("/rooms/save")
-    public String saveRoom(Room room, RedirectAttributes ra) {
-        service.save(room);
+    public String saveRoom(Room room, RedirectAttributes ra,
+        @RequestParam(name = "image", required = false) MultipartFile multipartFile
+    ) throws IOException {
+        
+        if (!multipartFile.isEmpty()) {
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			room.setThumbnail(fileName);
+
+			Room savedRoom = service.save(room);
+
+			String uploadDir = "../room_images/"+savedRoom.getHost().getEmail() + "/" + savedRoom.getId();
+
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		} else {
+			if (room.renderThumbnailImage().isEmpty()) 
+                room.setThumbnail(null);
+			service.save(room);
+		}
+
+
         ra.addFlashAttribute("message", "The room has been saved successfully.");
         return getRedirectURLtoAffectedRoom(room);
     }
@@ -125,12 +161,16 @@ public class RoomAdminController {
             List<Country> listCountries = countryService.listAll();
             List<Rule> listRules = ruleService.listAll();
             List<Amentity> listAmentities = amentityService.listAll();
+            List<RoomGroup> listRoomGroups = roomGroupService.listAll();
+            List<RoomPrivacy> listPrivacyTypes = roomPrivacyService.listAll();
             model.addAttribute("listRules", listRules);
             model.addAttribute("listAmentities", listAmentities);
             model.addAttribute("listHosts", listUsers);
             model.addAttribute("listCategories", listCategories);
             model.addAttribute("listCurrencies", listCurrencies);
             model.addAttribute("listCountries", listCountries);
+            model.addAttribute("listRoomGroups", listRoomGroups);
+            model.addAttribute("listPrivacyTypes", listPrivacyTypes); 
 
             Room room = service.getById(id);
             model.addAttribute("room", room);

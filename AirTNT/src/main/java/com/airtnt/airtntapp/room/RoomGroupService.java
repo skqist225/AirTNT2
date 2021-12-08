@@ -24,4 +24,8 @@ public class RoomGroupService {
 
         return roomGroups;
     }
+
+    public List<RoomGroup> listAll(){ 
+        return (List<RoomGroup>)roomGroupRepository.findAll();
+    }
 }

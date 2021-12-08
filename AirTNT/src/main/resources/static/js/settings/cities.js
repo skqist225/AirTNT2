@@ -138,9 +138,6 @@ async function deleteCity() {
   await $.ajax({
     type: "DELETE",
     url: url,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader(csrfHeaderName, csrfValue);
-    },
   })
     .done(function () {
       $("#dropDownCities option[value='" + cityId + "']").remove();
@@ -160,7 +157,7 @@ async function updateCity() {
     var cityId = dropDownCities.val();
     var cityName = fieldCityName.val();
     stateId = dropDownStatesForCities.val();
-    if (!(await checkNameCityUnique(cityId, cityName))) return;
+    if (!checkNameCityUnique(cityId, cityName)) return;
     url = contextPath + "cities/save";
 
     var data = { id: cityId, name: cityName, state: { id: stateId } };
@@ -168,9 +165,6 @@ async function updateCity() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: JSON.stringify(data),
       contentType: "application/json",
     })
@@ -211,9 +205,6 @@ async function addCity() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: JSON.stringify(data),
       contentType: "application/json",
     })
@@ -260,7 +251,7 @@ function changeFormCityToSelectedCity() {
 async function checkNameCityUnique(id, name) {
   url = contextPath + "cities/check_name";
 
-  params = { id: id, name: name, _csrf: csrfValue };
+  params = { id: id, name: name };
 
   let value = false;
   await $.post(url, params, function (response) {

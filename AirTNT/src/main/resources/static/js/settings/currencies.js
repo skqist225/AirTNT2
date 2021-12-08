@@ -76,9 +76,6 @@ async function deleteCurrency() {
     await $.ajax({
       type: "DELETE",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
     })
       .done(function () {
         $("#dropDownCurrencies option[value='" + currencyId + "']").remove();
@@ -110,9 +107,6 @@ async function updateCurrency() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: JSON.stringify(data),
       contentType: "application/json",
     })
@@ -153,9 +147,6 @@ async function addCurrency() {
     await $.ajax({
       type: "POST",
       url: url,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader(csrfHeaderName, csrfValue);
-      },
       data: JSON.stringify(data),
       contentType: "application/json",
     })
@@ -240,7 +231,7 @@ async function loadCurrencies() {
 async function checkUnitCurrencyUnique(id, unit) {
   url = contextPath + "currencies/check_unit";
 
-  params = { id: id, unit: unit, _csrf: csrfValue };
+  params = { id: id, unit: unit };
 
   let value = false;
   await $.post(url, params, function (response) {
