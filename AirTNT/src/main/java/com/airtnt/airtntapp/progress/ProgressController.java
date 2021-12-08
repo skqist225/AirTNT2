@@ -66,10 +66,10 @@ public class ProgressController {
         Map<Integer, Float> feesInMonth = new HashMap<>();
         Map<Integer, Integer> numberOfBookingsInMonth = new HashMap<>();
         for (Booking b : bookings) {
-            if (b.getRoom().getCurrency().getSymbol().equals("$"))
-                totalFee += b.getTotalFee() * 22705;
-            else
-                totalFee += b.getTotalFee();
+            // if (b.getRoom().getCurrency().getSymbol().equals("$"))
+            // totalFee += b.getTotalFee() * 22705;
+            // else
+            totalFee += b.getTotalFee();
 
             Integer monthValue = b.getBookingDate().getMonthValue();
 
