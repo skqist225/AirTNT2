@@ -147,9 +147,16 @@ public class UserAdminController {
 			
 			User user = service.get(id);
 			Address address = user.getAddress();
-			Integer countryId = address.getCountry()==null? null :address.getCountry().getId();
-			Integer stateId = address.getState()==null? null :address.getState().getId();
-			Integer cityId = address.getCity()==null? null :address.getCity().getId();
+			Integer countryId,stateId,cityId;
+			if(address==null){
+				countryId = null;
+				stateId = null;
+				cityId = null;
+			}else{
+				countryId = address.getCountry()==null? null :address.getCountry().getId();
+				stateId = address.getState()==null? null :address.getState().getId();
+				cityId = address.getCity()==null? null :address.getCity().getId();
+			}
 			model.addAttribute("user", user);
 			model.addAttribute("listRoles", listRoles);
 			model.addAttribute("listCountries", listCountries);
