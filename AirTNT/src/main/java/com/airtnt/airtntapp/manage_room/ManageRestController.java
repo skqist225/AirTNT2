@@ -28,7 +28,7 @@ public class ManageRestController {
             values.put("bathroomCount", payload.get("bathroom").toString());
         } else if (fieldName.equals("groupAndTypeAndPrivacy")) {
             values.put("roomGroup", payload.get("roomGroup").toString());
-            values.put("roomType", payload.get("roomType").toString());
+            values.put("category", payload.get("category").toString());
             values.put("roomPrivacy", payload.get("roomPrivacy").toString());
         } else if (fieldName.equals("location")) {
             values.put("country", payload.get("country").toString());

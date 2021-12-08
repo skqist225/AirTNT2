@@ -304,23 +304,23 @@ async function updateField(fieldName, dataInput) {
         }
         case 'groupAndTypeAndPrivacy': {
             const groupId = $('select[id="manage-ys__group-input"]').val();
-            const typeId = $('select[id="manage-ys__type-input"]').val();
+            const categoryId = $('select[id="manage-ys__type-input"]').val();
             const privacyId = $('select[id="manage-ys__privacy-input"]').val();
 
             const { data } = await axios.post(postURL, {
                 roomGroup: groupId,
-                roomType: typeId,
+                category: categoryId,
                 roomPrivacy: privacyId,
             });
 
             if (data === 'OK') {
                 alertify.success('Cập nhật thông tin phòng thành công!');
                 roomGroup = groupId * 1;
-                roomType = typeId * 1;
+                category = categoryId * 1;
                 roomPrivacy = privacyId * 1;
 
                 $('select[id="manage-ys__group-input"]').val(roomGroup);
-                $('select[id="manage-ys__type-input"]').val(roomType);
+                $('select[id="manage-ys__type-input"]').val(category);
                 $('select[id="manage-ys__privacy-input"]').val(roomPrivacy);
             }
 
@@ -443,7 +443,7 @@ function hideEditBox(sectionKey) {
         $('#manage-ys__bathRoom').text(bathroom);
     } else if (sectionKey === 'groupAndTypeAndPrivacy') {
         $('select[id="manage-ys__group-input"]').val(roomGroup);
-        $('select[id="manage-ys__type-input"]').val(roomType);
+        $('select[id="manage-ys__type-input"]').val(category);
         $('select[id="manage-ys__privacy-input"]').val(roomPrivacy);
     } else if (sectionKey === 'location') {
         $('#manage-ys__location-country').val(country);

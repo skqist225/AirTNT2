@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import com.airtnt.airtntapp.FileUploadUtil;
 import com.airtnt.airtntapp.user.UserRepository;
 import com.airtnt.entity.Amentity;
+import com.airtnt.entity.Category;
 import com.airtnt.entity.City;
 import com.airtnt.entity.Country;
 import com.airtnt.entity.Room;
@@ -114,6 +115,9 @@ public class RoomService {
 		if (sortField.equals("lastModified")) {
 			sort = Sort.by("updatedDate");
 		}
+		if (sortField.equals("category-name")) {
+			sort = Sort.by("category.name");
+		}
 
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(pageNumber - 1, MAX_ROOM_PER_FETCH_BY_HOST, sort); // pase base 0
@@ -198,6 +202,7 @@ public class RoomService {
 			}
 			case "groupAndTypeAndPrivacy": {
 				room.setRoomGroup(new RoomGroup(Integer.parseInt(values.get("roomGroup"))));
+				room.setCategory(new Category(Integer.parseInt(values.get("category"))));
 				room.setPrivacyType(new RoomPrivacy(Integer.parseInt(values.get("roomPrivacy"))));
 				break;
 			}

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.airtnt.airtntapp.amentity.AmentityService;
+import com.airtnt.airtntapp.category.CategoryService;
 import com.airtnt.airtntapp.country.CountryService;
 import com.airtnt.airtntapp.privacy.PrivacyTypeService;
 import com.airtnt.airtntapp.room.RoomGroupService;
 import com.airtnt.airtntapp.room.RoomService;
 import com.airtnt.entity.Amentity;
+import com.airtnt.entity.Category;
 import com.airtnt.entity.Image;
 import com.airtnt.entity.Room;
 
@@ -25,6 +27,9 @@ public class ManageController {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private CountryService countryService;
@@ -79,6 +84,9 @@ public class ManageController {
         model.addAttribute("prominentAmentitiesID", prominentAmentitiesID);
         model.addAttribute("favoriteAmentitiesID", favoriteAmentitiesID);
         model.addAttribute("safeAmentitiesID", safeAmentitiesID);
+
+        List<Category> categories = categoryService.listAll();
+        model.addAttribute("categories", categories);
 
         return new String("manage_space/manage_your_space");
     }

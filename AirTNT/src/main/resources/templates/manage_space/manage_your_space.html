@@ -642,12 +642,14 @@
                                                                 id="manage-ys__type-input"
                                                                 class="manage-ys__input"
                                                             >
-                                                                <th:block th:each="t : ${roomType}">
+                                                                <th:block
+                                                                    th:each="c : ${categories}"
+                                                                >
                                                                     <option
-                                                                        th:value="${t.id}"
-                                                                        th:selected="${t.id == room.roomType.id}"
+                                                                        th:value="${c.id}"
+                                                                        th:selected="${c.id == room.category.id}"
                                                                     >
-                                                                        [[${t.name}]]
+                                                                        [[${c.name}]]
                                                                     </option>
                                                                 </th:block>
                                                             </select>
@@ -757,7 +759,7 @@
             let bathroom = /*[[${room.bathroomCount}]]*/ 0;
 
             let roomGroup = /*[[${room.roomGroup.id}]]*/ 0;
-            let roomType = /*[[${room.roomType.id}]]*/ 0;
+            let category = /*[[${room.category.id}]]*/ 0;
             let roomPrivacy = /*[[${room.privacyType.id}]]*/ 0;
 
             let country = /*[[${room.country.id}]]*/ 0;
