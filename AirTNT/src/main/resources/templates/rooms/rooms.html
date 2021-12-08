@@ -43,6 +43,7 @@
               th:replace="fragments :: column_link('/admin/rooms', 'price', 'PRICE', 'none')"
             ></th>
             <th>status</th>
+            <th>Review and Rating</th>
             <th></th>
           </thead>
           <tbody>
@@ -64,6 +65,13 @@
                 <div
                   th:replace="fragments::status(${room.status}, 'room', '/admin/rooms/'+${room.id})"
                 ></div>
+              </td>
+
+              <td>
+                <div
+                  th:replace="fragments::seeReview('Room', '/admin/rooms/seeReview/' + ${room.id})"
+                ></div>
+                &nbsp;
               </td>
               <td>
                 <div

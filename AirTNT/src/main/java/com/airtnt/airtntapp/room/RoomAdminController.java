@@ -8,6 +8,7 @@ import com.airtnt.airtntapp.amentity.AmentityService;
 import com.airtnt.airtntapp.category.CategoryService;
 import com.airtnt.airtntapp.country.CountryService;
 import com.airtnt.airtntapp.currency.CurrencyRepository;
+import com.airtnt.airtntapp.review.ReviewService;
 import com.airtnt.airtntapp.rule.RuleService;
 import com.airtnt.airtntapp.user.UserService;
 import com.airtnt.entity.Exception.RoomNotFoundException;
@@ -15,6 +16,7 @@ import com.airtnt.entity.Amentity;
 import com.airtnt.entity.Category;
 import com.airtnt.entity.Country;
 import com.airtnt.entity.Currency;
+import com.airtnt.entity.Review;
 import com.airtnt.entity.Room;
 import com.airtnt.entity.RoomGroup;
 import com.airtnt.entity.RoomPrivacy;
@@ -58,6 +60,9 @@ public class RoomAdminController {
     RoomGroupService roomGroupService;
     @Autowired
     RoomPrivacyService roomPrivacyService;
+    
+    @Autowired
+    private ReviewService reviewService;
     
 
     @GetMapping("/rooms")
@@ -201,4 +206,14 @@ public class RoomAdminController {
         return "redirect:/admin/rooms";
     }
 
+    
+    @GetMapping("/rooms/seeReview/{id}")
+    public String seeReview(Model model, @PathVariable("id") Integer id)
+    {
+        List<Review> reviews = reviewService.getReviewByIdRoom(id);
+        Integer totalRating = reviewService.getTotalRatingByIdRoom(id);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("totalRating", totalRating);
+        return "rooms/seeReview";
+    }
 }

@@ -16,4 +16,10 @@ public interface ReviewRepository extends CrudRepository<Review, Integer> {
 
     @Query("SELECT r FROM Review r WHERE r.booking.id IN (:bookingIds)")
     public List<Review> getReviewsByBookings(Integer[] bookingIds);
+
+    @Query("SELECT r FROM Review r WHERE r.booking.room.id = :id")
+    public List<Review> getReviewByIdRoom(int id);
+
+    @Query("SELECT AVG(r.finalRating) FROM Review r WHERE r.booking.room.id = :id")
+    public Integer getTotalRatingByIdRoom(Integer id);
 }

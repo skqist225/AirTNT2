@@ -65,11 +65,20 @@
     </div>
     <div th:fragment="edit(entityName, editURL)" th:remove="tag">
       <a
-        class="fas fa-edit fa-2x icon-green"
+        class="fas fa-info-circle fa-2x icon-green"
         th:href="@{${editURL}}"
         th:title="'Edit this' + ${entityName}"
       ></a>
     </div>
+
+    <div th:fragment="seeReview(entityName, seeReviewURL)" th:remove="tag">
+      <a
+        class="fas fa-star-half-alt fa-2x icon-green"
+        th:href="@{${seeReviewURL}}"
+        th:title="'Check Review of this' + ${entityName}"
+      ></a>
+    </div>
+
     <div
       th:fragment="delete(entityName, deleteURL, visible, id)"
       th:remove="tag"

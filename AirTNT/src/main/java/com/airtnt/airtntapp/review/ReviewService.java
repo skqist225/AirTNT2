@@ -28,4 +28,12 @@ public class ReviewService {
     public Review updateReview(Review review) {
         return reviewRepository.save(review);
     }
+
+    public List<Review> getReviewByIdRoom(int id) {
+        return reviewRepository.getReviewByIdRoom(id);
+    }
+
+    public Integer getTotalRatingByIdRoom(Integer id) {
+        return reviewRepository.getTotalRatingByIdRoom(id);
+    }
 }
