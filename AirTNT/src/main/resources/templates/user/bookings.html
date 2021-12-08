@@ -432,7 +432,7 @@
                                                                             >
                                                                                 [[${booking.room.privacyType.name}]]
                                                                                 tại
-                                                                                [[${booking.room.roomType.name}]]
+                                                                                [[${booking.room.category.name}]]
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -684,7 +684,32 @@
 
                                 $(this).removeClass('selected');
                             } else {
-                                initRatingValue(ratingComment);
+                                switch (ratingName) {
+                                    case 'Mức độ sạch sẽ': {
+                                        cleanlinessRating = starValue;
+                                        break;
+                                    }
+                                    case 'Độ chính xác': {
+                                        accuracyRating = starValue;
+                                        break;
+                                    }
+                                    case 'Liên lạc': {
+                                        contactRating = starValue;
+                                        break;
+                                    }
+                                    case 'Vị trí': {
+                                        locationRating = starValue;
+                                        break;
+                                    }
+                                    case 'Nhận phòng': {
+                                        checkinRating = starValue;
+                                        break;
+                                    }
+                                    case 'Giá trị': {
+                                        valueRating = starValue;
+                                        break;
+                                    }
+                                }
                             }
                         } else {
                             $(this)
@@ -699,7 +724,32 @@
                                 });
                             $(this).addClass('selected');
 
-                            initRatingValue(ratingComment);
+                            switch (ratingName) {
+                                case 'Mức độ sạch sẽ': {
+                                    cleanlinessRating = starValue;
+                                    break;
+                                }
+                                case 'Độ chính xác': {
+                                    accuracyRating = starValue;
+                                    break;
+                                }
+                                case 'Liên lạc': {
+                                    contactRating = starValue;
+                                    break;
+                                }
+                                case 'Vị trí': {
+                                    locationRating = starValue;
+                                    break;
+                                }
+                                case 'Nhận phòng': {
+                                    checkinRating = starValue;
+                                    break;
+                                }
+                                case 'Giá trị': {
+                                    valueRating = starValue;
+                                    break;
+                                }
+                            }
                         }
                     });
                 });
@@ -716,44 +766,11 @@
                 $('.chooseRoomThumbnail').css('display', 'none');
             }
 
-            function initRatingValue(ratingName) {
-                switch (ratingName) {
-                    case 'Mức độ sạch sẽ': {
-                        cleanlinessRating = starValue;
-                        break;
-                    }
-                    case 'Độ chính xác': {
-                        accuracyRating = starValue;
-                        break;
-                    }
-                    case 'Liên lạc': {
-                        contactRating = starValue;
-                        break;
-                    }
-                    case 'Vị trí': {
-                        locationRating = starValue;
-                        break;
-                    }
-                    case 'Nhận phòng': {
-                        checkinRating = starValue;
-                        break;
-                    }
-                    case 'Giá trị': {
-                        valueRating = starValue;
-                        break;
-                    }
-                }
-            }
-
             function reviewSubmit(self) {
-                console.log('cleanliness', cleanliness);
-                console.log('contact', contact);
-                console.log('checkin', checkin);
-                console.log('accuracy', accuracy);
-                console.log('location', location);
-                console.log('value');
-
-                console.log(ratingComment);
+                if (!ratingComment) {
+                    alert('Vui lòng để lại bình luận');
+                    return;
+                }
 
                 window.location.href = `${baseURL}user/rating/${self.data(
                     'booking-id'
@@ -853,8 +870,6 @@
                                 break;
                             }
                         }
-
-                        initRatingValue(ratingComment);
                     });
                 });
             }

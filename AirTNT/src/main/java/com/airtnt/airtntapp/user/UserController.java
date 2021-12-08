@@ -45,7 +45,7 @@ import org.springframework.util.StringUtils;
 
 @Controller
 @RequestMapping("/user/")
-public class UserController { 
+public class UserController {
 
     @Autowired
     private UserService userService;
@@ -259,6 +259,7 @@ public class UserController {
             @Param("locationRating") Integer locationRating,
             @Param("valueRating") Integer valueRating,
             @Param("comment") String comment) {
+
         SubRating subRating = SubRating.builder()
                 .cleanliness(cleanlinessRating)
                 .contact(contactRating)
@@ -272,14 +273,24 @@ public class UserController {
         sum = cleanlinessRating + contactRating + checkinRating + accuracyRating + locationRating + valueRating;
         sum /= 6;
 
-        Review review = Review.builder()
-                .comment(comment)
-                .subRating(subRating)
-                .finalRating(sum)
-                .booking(new Booking(bookingId))
-                .build();
+        Booking booking = bookingService.getBookingById(bookingId);
+        if (booking.getReview() != null) {
+            Review review = booking.getReview();
+            review.setSubRating(subRating);
+            review.setFinalRating(sum);
+            review.setComment(comment);
 
-        reviewService.createReview(review);
+            reviewService.updateReview(review);
+        } else {
+            Review review = Review.builder()
+                    .comment(comment)
+                    .subRating(subRating)
+                    .finalRating(sum)
+                    .booking(new Booking(bookingId))
+                    .build();
+
+            reviewService.createReview(review);
+        }
 
         return "redirect:/user/bookings";
     }
