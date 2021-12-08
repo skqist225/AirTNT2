@@ -14,11 +14,6 @@ a:active {
     border: 0px !important;
 }
 
-button:active {
-    border-style: none !important;
-    border: 0px !important;
-}
-
 .categories__container {
     height: 80px;
     width: 100%;
@@ -508,4 +503,28 @@ input[type='checkbox'] {
     font-size: 18px;
     margin-left: 8px;
     height: 35px;
+}
+
+#index__filter-btn {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    width: auto;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    outline: none;
+    padding: 8px 16px;
+    transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s,
+        transform 0.1s ease 0s;
+    border: none;
+    background: rgb(34, 34, 34);
+    color: rgb(255, 255, 255);
+    height: 48px;
+    width: 100px;
+    margin-left: 20px;
 }

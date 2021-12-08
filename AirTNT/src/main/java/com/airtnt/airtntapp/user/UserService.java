@@ -42,8 +42,8 @@ public class UserService {
         user.setPassword(encodedPassword);
     }
 
-    public boolean isPasswordMatch(String oldPass, String newPass) {
-        return passwordEncoder.matches(newPass, oldPass);
+    public boolean isPasswordMatch(String rawPass, String hashPass) {
+        return passwordEncoder.matches(rawPass, hashPass);
     }
 
     public void registerUser(User user) {
@@ -141,9 +141,9 @@ public class UserService {
         }
     }
 
-    public void delete(Integer id) throws UserNotFoundException { 
+    public void delete(Integer id) throws UserNotFoundException {
         Long countById = userRepository.countById(id);
-        if ((countById == null || countById == 0)) { 
+        if ((countById == null || countById == 0)) {
             throw new UserNotFoundException("Could not find any user with ID " + id);
         }
 
@@ -151,7 +151,7 @@ public class UserService {
     }
 
     public void updateUserEnabledStatus(Integer id, boolean enabled) {
-        userRepository.updateStatus(id, enabled); 
+        userRepository.updateStatus(id, enabled);
     }
 
     public User findById(Integer id) {

@@ -14,9 +14,11 @@ public class CityService {
     CityRepository cityRepository;
 
     public City getCityByName(String cityName) {
-        City city = cityRepository.findByName(cityName);
+        return cityRepository.findByName(cityName);
+    }
 
-        return city;
+    public City getCityById(Integer cityId) {
+        return cityRepository.findById(cityId).get();
     }
 
     public City addCity(String cityName, State state) {
