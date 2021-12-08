@@ -11,6 +11,7 @@ import com.airtnt.airtntapp.city.CityService;
 import com.airtnt.airtntapp.rule.RuleService;
 import com.airtnt.airtntapp.state.StateService;
 import com.airtnt.airtntapp.user.UserService;
+import com.airtnt.airtntapp.user.admin.UserNotFoundException;
 import com.airtnt.entity.Room;
 
 import org.json.JSONObject;
@@ -97,7 +98,7 @@ public class RoomRestController {
 
     @PostMapping("room/save")
     public String saveRoom(@AuthenticationPrincipal UserDetails userDetails,
-            @ModelAttribute RoomPostDTO payload) throws IOException {
+            @ModelAttribute RoomPostDTO payload) throws IOException, UserNotFoundException {
         Set<Rule> rules = new HashSet<>();
         Set<Amentity> amentities = new HashSet<>();
         Set<Image> images = new HashSet<>();
@@ -132,7 +133,7 @@ public class RoomRestController {
         } else
             city = new City(payload.getCity(), state);
 
-        User user = userService.getByEmail(userDetails.getUsername());
+        User user = userService.get(payload.getHost());
         user.setRole(new Role(1));
         userService.saveUser(user);
 
@@ -144,7 +145,7 @@ public class RoomRestController {
                 .images(images).latitude(payload.getLatitude()).longitude(payload.getLongitude())
                 .price(payload.getPrice()).priceType(pt).city(city)
                 .state(state).country(country).rules(rules).host(new User(payload.getHost()))
-                .roomGroup(new RoomGroup(payload.getRoomGroup()))
+                .roomGroup(new RoomGroup(payload.getRoomGroup())).priceType(PriceType.PER_NIGHT)
                 .host(new User(payload.getHost())).category(new Category(payload.getCategory()))
                 .currency(new Currency(payload.getCurrency())).privacyType(new RoomPrivacy(payload.getPrivacyType()))
                 .thumbnail(images.iterator().next().getImage()).street(payload.getStreet()).status(status).build();
@@ -153,12 +154,12 @@ public class RoomRestController {
 
         /* MOVE IMAGE TO FOLDER */
         if (savedRoom != null) {
-            String uploadDir = "../room_images/" + userDetails.getUsername() + "/" + savedRoom.getId();
-            String source = "../room_images/" + userDetails.getUsername() + "/";
+            String uploadDir = "../room_images/" + user.getEmail() + "/" + savedRoom.getId();
+            String source = "../room_images/" + user.getEmail() + "/";
             Path sourcePath = Paths.get(source);
             Path targetPath = Files.createDirectories(Paths.get(uploadDir));
             for (String imageName : payload.getImages()) {
-                Files.move(sourcePath.resolve(imageName), targetPath.resolve(imageName),
+                Files.copy(sourcePath.resolve(imageName), targetPath.resolve(imageName),
                         StandardCopyOption.REPLACE_EXISTING);
             }
         }

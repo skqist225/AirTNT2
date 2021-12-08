@@ -44,7 +44,10 @@
                     Yêu thích
                 </div>
 
-                <div class="normal-flex">
+                <div
+                    class="normal-flex"
+                    style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px"
+                >
                     <th:block th:each="room : ${wishlists}">
                         <div class="wishlists__room-box" onclick="redirectToRoomDetails($(this));">
                             <input type="hidden" th:value="${room.id}" />

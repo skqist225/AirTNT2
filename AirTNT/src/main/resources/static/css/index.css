@@ -161,6 +161,7 @@ a:active {
     line-height: 20px;
     color: #717171;
     font-weight: 400;
+    width: 140px;
 }
 
 .heartSvg.like {
