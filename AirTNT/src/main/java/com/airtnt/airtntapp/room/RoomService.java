@@ -26,12 +26,12 @@ import org.springframework.stereotype.Service;
 import com.airtnt.airtntapp.FileUploadUtil;
 import com.airtnt.airtntapp.user.UserRepository;
 import com.airtnt.entity.Amentity;
+import com.airtnt.entity.Category;
 import com.airtnt.entity.City;
 import com.airtnt.entity.Country;
 import com.airtnt.entity.Room;
 import com.airtnt.entity.RoomGroup;
 import com.airtnt.entity.RoomPrivacy;
-import com.airtnt.entity.RoomType;
 import com.airtnt.entity.State;
 import com.airtnt.entity.User;
 import com.airtnt.entity.Exception.RoomNotFoundException;
@@ -39,7 +39,7 @@ import com.airtnt.entity.Exception.RoomNotFoundException;
 @Service
 @Transactional
 public class RoomService {
-	public static final int MAX_ROOM_PER_FETCH = 20;
+	public static final int MAX_ROOM_PER_FETCH = 40;
 	public static final int MAX_ROOM_PER_FETCH_BY_HOST = 8;
 	public static final int ROOMS_PER_PAGE = 10;
 
@@ -114,6 +114,9 @@ public class RoomService {
 		}
 		if (sortField.equals("lastModified")) {
 			sort = Sort.by("updatedDate");
+		}
+		if (sortField.equals("category-name")) {
+			sort = Sort.by("category.name");
 		}
 
 		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
@@ -199,7 +202,7 @@ public class RoomService {
 			}
 			case "groupAndTypeAndPrivacy": {
 				room.setRoomGroup(new RoomGroup(Integer.parseInt(values.get("roomGroup"))));
-				room.setRoomType(new RoomType(Integer.parseInt(values.get("roomType"))));
+				room.setCategory(new Category(Integer.parseInt(values.get("category"))));
 				room.setPrivacyType(new RoomPrivacy(Integer.parseInt(values.get("roomPrivacy"))));
 				break;
 			}

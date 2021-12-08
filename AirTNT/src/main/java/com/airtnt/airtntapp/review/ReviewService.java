@@ -24,4 +24,8 @@ public class ReviewService {
     public Review createReview(Review review) {
         return reviewRepository.save(review);
     }
+
+    public Review updateReview(Review review) {
+        return reviewRepository.save(review);
+    }
 }

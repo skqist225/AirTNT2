@@ -18,7 +18,6 @@ import com.airtnt.entity.Currency;
 import com.airtnt.entity.Room;
 import com.airtnt.entity.RoomGroup;
 import com.airtnt.entity.RoomPrivacy;
-import com.airtnt.entity.RoomType;
 import com.airtnt.entity.Rule;
 import com.airtnt.entity.User;
 

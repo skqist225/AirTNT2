@@ -214,7 +214,7 @@
                         <div>
                             <label for="">Quốc gia/khu vực</label>
                             <select
-                                name="userCountryName"
+                                name="userCountryId"
                                 id="countryNameSelect"
                                 class="custom-select"
                             >
@@ -228,7 +228,7 @@
                         </div>
                         <div>
                             <label for="">Tỉnh/thành phố</label>
-                            <select name="userStateName" id="stateNameSelect" class="custom-select">
+                            <select name="userStateId" id="stateNameSelect" class="custom-select">
                                 <option
                                     th:each="s : ${states}"
                                     th:value="${s.id}"
@@ -239,7 +239,7 @@
                         </div>
                         <div>
                             <label for="">Quận/huyện</label>
-                            <select name="userCityName" id="cityNameSelect" class="custom-select">
+                            <select name="userCityId" id="cityNameSelect" class="custom-select">
                                 <option
                                     th:each="c : ${cities}"
                                     th:value="${c.id}"

@@ -9,6 +9,19 @@ a {
     text-decoration: none;
 }
 
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    border-style: none !important;
+    border: 0px !important;
+}
+
 .categories__container {
     height: 80px;
     width: 100%;
@@ -20,6 +33,7 @@ a {
 .flex {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .button__container {
@@ -28,7 +42,6 @@ a {
     border: none;
     outline: none;
     margin: 6px 6px 6px 0px;
-    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
     font-size: 14px;
     line-height: 18px;
     font-weight: 600;
@@ -138,7 +151,7 @@ a {
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;
-    width: 240px;
+    width: 210px;
 }
 
 .room__price {
@@ -262,7 +275,7 @@ a {
     z-index: 999999;
     width: 100vw;
     height: 100vh;
-    /* display: none; */
+    display: none;
 }
 
 .innerWrapper {
@@ -499,4 +512,28 @@ input[type='checkbox'] {
     font-size: 18px;
     margin-left: 8px;
     height: 35px;
+}
+
+#index__filter-btn {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    width: auto;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    outline: none;
+    padding: 8px 16px;
+    transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s,
+        transform 0.1s ease 0s;
+    border: none;
+    background: rgb(34, 34, 34);
+    color: rgb(255, 255, 255);
+    height: 48px;
+    width: 100px;
+    margin-left: 20px;
 }

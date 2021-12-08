@@ -25,4 +25,8 @@ public class StateService {
     public List<State> listAll() {
         return (List<State>) stateRepository.findAll();
     }
+
+    public State getStateById(Integer stateId) {
+        return stateRepository.findById(stateId).get();
+    }
 }

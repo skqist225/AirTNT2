@@ -28,7 +28,11 @@ import com.airtnt.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +49,7 @@ import org.springframework.util.StringUtils;
 
 @Controller
 @RequestMapping("/user/")
-public class UserController { 
+public class UserController {
 
     @Autowired
     private UserService userService;
@@ -64,6 +68,9 @@ public class UserController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("register")
     public String register(ModelMap model) {
@@ -138,8 +145,7 @@ public class UserController {
 
     @GetMapping("personal-info")
     public String personalInfo(ModelMap model, @AuthenticationPrincipal AirtntUserDetails userDetails) {
-        String userEmail = userDetails.getUsername();
-        User user = userService.getByEmail(userEmail);
+        User user = userService.getByEmail(userDetails.getUsername());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         List<Country> countries = countryService.getCountries();
         List<State> states = stateService.listAll();
@@ -176,19 +182,20 @@ public class UserController {
             @RequestParam(name = "userDayOfBirth", required = false) Integer userDayOfBirth,
             @RequestParam(name = "userMonthOfBirth", required = false) Integer userMonthOfBirth,
             @RequestParam(name = "userYearOfBirth", required = false) Integer userYearOfBirth,
-            @RequestParam(name = "userCountryName", required = false) Integer countryId,
-            @RequestParam(name = "userStateName", required = false) String stateName,
-            @RequestParam(name = "userCityName", required = false) String cityName, HttpServletRequest request,
-            RedirectAttributes ra) throws IOException {
+            @RequestParam(name = "userCountryId", required = false) Integer countryId,
+            @RequestParam(name = "userStateId", required = false) Integer stateId,
+            @RequestParam(name = "userCityId", required = false) Integer cityId, HttpServletRequest request,
+            RedirectAttributes ra, Model model)
+            throws IOException {
         User currentUser = userService.getCurrentUser(user.getId());
         User savedUser = null;
 
         if (updatedField.equals("avatar")) {
-            if (!userAvatar.isEmpty()) {
+            if (userAvatar != null) {
                 String fileName = StringUtils.cleanPath(userAvatar.getOriginalFilename());
                 currentUser.setAvatar(fileName);
                 savedUser = userService.saveUser(currentUser);
-                String uploadDir = "../user-photos/" + savedUser.getId();
+                String uploadDir = "../user_images/" + savedUser.getId();
 
                 FileUploadUtil.cleanDir(uploadDir);
                 FileUploadUtil.saveFile(uploadDir, fileName, userAvatar);
@@ -200,6 +207,7 @@ public class UserController {
         }
 
         if (updatedField.equals("password")) {
+            currentUser.setPassword(newPassword);
             userService.encodePassword(currentUser);
             savedUser = userService.saveUser(currentUser);
         }
@@ -218,6 +226,11 @@ public class UserController {
         if (updatedField.equals("email")) {
             currentUser.setEmail(user.getEmail());
             savedUser = userService.saveUser(currentUser);
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(savedUser.getEmail(),
+                    savedUser.getPassword());
+            Authentication result = authenticationManager.authenticate(authentication);
+            SecurityContextHolder.getContext().setAuthentication(result);
         }
 
         if (updatedField.equals("phoneNumber")) {
@@ -227,19 +240,19 @@ public class UserController {
 
         if (updatedField.equals("address")) {
             Country country = countryService.getCountryById(countryId);
-            State state = stateService.getStateByName(stateName);
-            City city = cityService.getCityByName(cityName);
-            if (state == null) { // does not exist in db
-                System.out.println("state is not existed");
-                String stateCode = request.getParameter(stateName);
-                state = stateService.addState(stateName, stateCode, country);
-            }
+            State state = stateService.getStateById(stateId);
+            City city = cityService.getCityById(cityId);
+            // if (state == null) { // does not exist in db
+            // System.out.println("state is not existed");
+            // String stateCode = request.getParameter(stateName);
+            // state = stateService.addState(stateName, stateCode, country);
+            // }
 
-            if (city == null) {
-                System.out.println("city is not existed");
-                // String cityCode = request.getParameter(cityName);
-                city = cityService.addCity(cityName, state);
-            }
+            // if (city == null) {
+            // System.out.println("city is not existed");
+            // // String cityCode = request.getParameter(cityName);
+            // city = cityService.addCity(cityName, state);
+            // }
             String aprtNoAndStreet = request.getParameter("address.aprtNoAndStreet");
             Address newAddress = new Address(country, state, city, aprtNoAndStreet);
             currentUser.setAddress(newAddress);
@@ -259,6 +272,7 @@ public class UserController {
             @Param("locationRating") Integer locationRating,
             @Param("valueRating") Integer valueRating,
             @Param("comment") String comment) {
+
         SubRating subRating = SubRating.builder()
                 .cleanliness(cleanlinessRating)
                 .contact(contactRating)
@@ -272,14 +286,24 @@ public class UserController {
         sum = cleanlinessRating + contactRating + checkinRating + accuracyRating + locationRating + valueRating;
         sum /= 6;
 
-        Review review = Review.builder()
-                .comment(comment)
-                .subRating(subRating)
-                .finalRating(sum)
-                .booking(new Booking(bookingId))
-                .build();
+        Booking booking = bookingService.getBookingById(bookingId);
+        if (booking.getReview() != null) {
+            Review review = booking.getReview();
+            review.setSubRating(subRating);
+            review.setFinalRating(sum);
+            review.setComment(comment);
 
-        reviewService.createReview(review);
+            reviewService.updateReview(review);
+        } else {
+            Review review = Review.builder()
+                    .comment(comment)
+                    .subRating(subRating)
+                    .finalRating(sum)
+                    .booking(new Booking(bookingId))
+                    .build();
+
+            reviewService.createReview(review);
+        }
 
         return "redirect:/user/bookings";
     }

@@ -62,10 +62,11 @@
                                 </div>
                             </th:block>
                         </div>
-                        <a
+                        <!-- <a
                             style="text-decoration: none; cursor: pointer"
                             href="javascript:toggleHiddenImages();"
-                        >
+                        > -->
+                        <a th:href="@{${room.id + '/images'}}">
                             <div class="rdt_showMoreImage">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +94,7 @@
                                 <div style="padding-left: 12px">Hiển thị tất cả ảnh</div>
                             </div>
                         </a>
+                        <!-- </a> -->
                     </div>
                 </section>
 
@@ -599,25 +601,11 @@
             </div>
         </div>
 
-        <div class="rdt_hidden">
-            <div th:replace="room/_room_details_partial :: showMoreImage"></div>
-        </div>
-
-        <div class="rdt__fullScreen">
-            <div th:replace="room/_room_details_partial :: image__header"></div>
-            <div id="rdt__imagesFullScreenContainer">
-                <div id="innerContainer"></div>
-            </div>
-            <div id="button__changeImage">
-                <div th:replace="room/_room_details_partial :: changeImage"></div>
-            </div>
-        </div>
-
         <div th:replace="_footer :: content"></div>
 
         <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-        <script type="text/javascript" th:src="@{/js/room/room_slider.js}"></script>
         <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/room/room_slider.js}"></script>
         <script type="text/javascript" th:src="@{/js/helpers/format_number.js}"></script>
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

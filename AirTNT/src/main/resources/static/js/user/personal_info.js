@@ -108,6 +108,9 @@ $(document).ready(function () {
             if ($(this).data('edit') === 'address') {
                 addressForm.submit();
             }
+            if ($(this).data('edit') === 'avatar') {
+                $('.formEdit_avatar').submit();
+            }
         });
     });
 

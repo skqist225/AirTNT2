@@ -61,8 +61,14 @@
         <thead>
             <tr>
                 <th>
-                    <div style="padding: 8px">
-                        <input type="checkbox" />
+                    <div>
+                        <button class="listings__table-header" data-sort-field="id">
+                            <div>MÃ PHÒNG</div>
+                            <div class="listings__fiter-icon-container">
+                                <span class="upper"> </span>
+                                <span class="downer"></span>
+                            </div>
+                        </button>
                     </div>
                 </th>
                 <th>
@@ -89,15 +95,19 @@
                 </th>
                 <th>
                     <div>
-                        <button class="listings__table-header">
-                            <div>VIỆC CẦN LÀM</div>
+                        <button class="listings__table-header" data-sort-field="price">
+                            <div>GIÁ PHÒNG MỖI ĐÊM</div>
+                            <div class="listings__fiter-icon-container">
+                                <span class="upper"> </span>
+                                <span class="downer"></span>
+                            </div>
                         </button>
                     </div>
                 </th>
                 <th>
                     <div>
-                        <button class="listings__table-header">
-                            <div>ĐẶT NGAY</div>
+                        <button class="listings__table-header" data-sort-field="category-name">
+                            <div>LOẠI PHÒNG</div>
                             <div class="listings__fiter-icon-container">
                                 <span class="upper"> </span>
                                 <span class="downer"></span>
@@ -227,9 +237,7 @@
             <th:block th:each="room : ${list}">
                 <tr th:data-room-id="${room.id}">
                     <td>
-                        <div style="padding-left: 8px">
-                            <input type="checkbox" />
-                        </div>
+                        <div style="padding-left: 8px">[[${room.id}]]</div>
                     </td>
                     <td>
                         <div style="display: flex; align-items: center">
@@ -261,13 +269,14 @@
                         </div>
                     </td>
                     <td>
-                        <button class="listings__complete-room-making listings__td-text">
-                            Hoàn thành
-                        </button>
+                        <div>
+                            [[${room.currency.symbol}]][[${#numbers.formatDecimal(room.price, 3,
+                            'POINT', 0, 'COMMA')}]]
+                        </div>
                     </td>
                     <td>
                         <div style="display: flex; align-items: center">
-                            <div>
+                            <!-- <div>
                                 <svg
                                     viewBox="0 0 16 16"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -281,7 +290,8 @@
                                     ></path>
                                 </svg>
                             </div>
-                            <div style="margin-left: 8px">Bật</div>
+                            <div style="margin-left: 8px">Bật</div> -->
+                            [[${room.category.name}]]
                         </div>
                     </td>
                     <td class="listings__td-text" data-column="BEDROOM">

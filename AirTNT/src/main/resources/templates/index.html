@@ -68,12 +68,12 @@
                         </th:block>
                     </div>
                     <div id="index__filter-container">
-                        <div>
+                        <!-- <div>
                             <input type="date" class="form-control" />
-                        </div>
+                        </div> -->
 
                         <div>
-                            <button class="filterButton">
+                            <button class="filterButton" onclick="displayEditThumbnailBox();">
                                 <span>
                                     <img
                                         th:src="@{/svg/filter.svg}"
@@ -86,7 +86,7 @@
                                     style="
                                         font-size: 14px;
                                         color: #222;
-                                        margin-right: 6px;
+                                        margin-left: 6px;
                                         display: inline-block;
                                     "
                                     >Bộ lọc</span
@@ -240,7 +240,11 @@
                                     <th:block th:each="privacy :${roomPrivacies}">
                                         <div class="normal-flex" style="padding: 12px 0">
                                             <div>
-                                                <input type="checkbox" />
+                                                <input
+                                                    type="checkbox"
+                                                    name="privacyFilter"
+                                                    th:value="${privacy.id}"
+                                                />
                                             </div>
                                             <div>
                                                 <div
@@ -299,7 +303,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="index__filter-block">
+                            <!-- <div class="index__filter-block">
                                 <div>
                                     <div class="index__box-filter-title">Đặt ngay</div>
                                     <div class="flex-space">
@@ -312,7 +316,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="index__filter-block">
                                 <div>
                                     <div class="index__box-filter-title">Phòng và phòng ngủ</div>
@@ -386,12 +390,7 @@
                                 </button>
                             </div>
                             <div>
-                                <button
-                                    class="manage-photos__save-edit-btn"
-                                    onclick="saveNewThumbnail();"
-                                >
-                                    Áp dụng
-                                </button>
+                                <button id="index__filter-btn">Áp dụng</button>
                             </div>
                         </div>
                     </div>
@@ -468,11 +467,35 @@
 
                             if (spanValue > 0) deleteButton.removeAttr('disabled');
                         }
+                    });
+                });
 
-                        // if()
+                $('#index__filter-btn').click(function () {
+                    $(this).click(function () {
+                        let choosenPrivacy = [];
+                        $('input[name="privacyFilter"]:checked').each(function () {
+                            choosenPrivacy.push($(this).val());
+                        });
+
+                        const minPrice = $('#min-input__modify').val();
+                        const maxPrice = $('#max-input__modify').val();
                     });
                 });
             });
+
+            function hideEditThumbnailBox() {
+                $('.radioThumbnail').each(function () {
+                    if ($(this).val() === thumbnail) {
+                        $(this).prop('checked', true);
+                    } else $(this).prop('checked', false);
+                });
+
+                $('#chooseRoomThumbnail').css('display', 'none');
+            }
+
+            function displayEditThumbnailBox() {
+                $('#chooseRoomThumbnail').css('display', 'block');
+            }
 
             function updateTextInput(val) {
                 $('#min-input__modify').val(seperateNumber(val));

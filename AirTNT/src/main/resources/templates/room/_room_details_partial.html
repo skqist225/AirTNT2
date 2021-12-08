@@ -51,7 +51,6 @@
 </div>
 
 <div th:fragment="showMoreImage" th:remove="tag">
-    <div th:replace="room/_room_details_partial :: image__header"></div>
     <div class="rdt_images_show">
         <a href="javascript:showFullscreenImage()">
             <div th:each="image,itr : ${room.images}">
