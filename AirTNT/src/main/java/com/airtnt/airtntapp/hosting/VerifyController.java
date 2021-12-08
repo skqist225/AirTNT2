@@ -3,6 +3,7 @@ package com.airtnt.airtntapp.hosting;
 import com.airtnt.airtntapp.room.RoomService;
 import com.airtnt.airtntapp.user.UserService;
 import com.airtnt.entity.Room;
+import com.airtnt.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +27,10 @@ public class VerifyController {
             @PathVariable("roomId") Integer roomId, Model model) {
         Room room = roomService.getRoomById(roomId);
         String userName = userDetails.getUsername();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        if (user.isPhoneVerified())
+            return "redirect:/hosting/listings/1";
 
         model.addAttribute("userName", userName);
         model.addAttribute("excludeBecomeHostAndNavigationHeader", true);

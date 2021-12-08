@@ -315,19 +315,11 @@
     outline: none;
 }
 
-.rdt_hidden {
-    z-index: 999;
+#rdt_images-verticle-show {
     background-color: #fff;
-    transform: translate(-100%, -51%);
     width: 100%;
     height: fit-content;
     transition: all 1s ease;
-    display: none;
-}
-
-.rdt_hidden.show {
-    display: block;
-    transform: translate(0%, 1.7%);
 }
 
 .rdt_images_show {
@@ -354,7 +346,7 @@
         transform 0.25s ease 0s;
 }
 
-.rdt__fullScreen {
+#rdt__fullScreen {
     position: absolute;
     top: 0;
     left: 0;
@@ -363,10 +355,6 @@
     z-index: 1000;
     background-color: #222;
     display: none;
-}
-
-.rdt__fullScreen.block {
-    display: block;
 }
 
 .shareSvg.white,

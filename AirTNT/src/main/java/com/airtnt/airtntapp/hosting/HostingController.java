@@ -57,6 +57,7 @@ public class HostingController {
         /*-------------------HOST------------------ */
         String userName = userDetails.getUsername();
         User user = userService.getByEmail(userName);
+
         model.addAttribute("userName", user.getFullName());
         model.addAttribute("userEmail", user.getEmail());
         model.addAttribute("userAvatar", user.getAvatarPath());
@@ -76,6 +77,9 @@ public class HostingController {
         Page<Room> rooms = roomService.getRoomsByHost(user, pageNumber, filters);
         model.addAttribute("roomsLength", rooms.getTotalElements());
         model.addAttribute("rooms", rooms);
+
+        if (!user.isPhoneVerified())
+            return "redirect:/verify-listing/" + rooms.getContent().get(0).getId();
         /*--------------------------------------------------------FILTER---------------------------------------------------------- */
 
         /*-----------------------------AMENTITIES------------------------------- */

@@ -9,6 +9,16 @@ a {
     text-decoration: none;
 }
 
+a:active {
+    border-style: none !important;
+    border: 0px !important;
+}
+
+button:active {
+    border-style: none !important;
+    border: 0px !important;
+}
+
 .categories__container {
     height: 80px;
     width: 100%;

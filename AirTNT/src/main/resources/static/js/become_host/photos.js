@@ -12,9 +12,9 @@ $(document).ready(function () {
     uploadPhotos.on('change', function () {
         readURL(this.files, uploadPhotos);
     });
-});
 
-test(uploadPhotos);
+    test(uploadPhotos);
+});
 
 async function test(uploadPhotos) {
     if (localStorage.getItem('room')) {

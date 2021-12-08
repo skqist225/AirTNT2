@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.airtnt.entity.Image;
 import com.airtnt.entity.User;
+import com.airtnt.entity.Exception.RoomNotFoundException;
 import com.airtnt.airtntapp.booking.BookedDate;
 import com.airtnt.airtntapp.booking.BookingService;
 import com.airtnt.airtntapp.review.ReviewService;
@@ -99,6 +100,14 @@ public class RoomController {
 		else
 			model.addAttribute("user", user.getFullName());
 		return "room/room_details";
+	}
+
+	@GetMapping("/room/{roomId}/images")
+	public String getRoomImages(@PathVariable("roomId") Integer roomId, Model model) throws RoomNotFoundException {
+		Room room = roomService.getById(roomId);
+		model.addAttribute("room", room);
+		model.addAttribute("excludeBecomeHostAndNavigationHeader", true);
+		return "room/images";
 	}
 
 	@GetMapping(value = "room/{roomId}/publish-celebration")

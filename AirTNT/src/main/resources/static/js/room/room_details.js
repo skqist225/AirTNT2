@@ -443,56 +443,6 @@ function toggleHiddenImages() {
     }
 }
 
-async function showFullscreenImage() {
-    const header = $('.header');
-    header.hide();
-    toggleHiddenImages();
-
-    const shareIcon = $('.shareSvg');
-    const loveIcon = $('.loveSvg');
-    const backIcon = $('.backSvg');
-    shareIcon.attr('class', 'shareSvg white');
-    loveIcon.attr('class', 'loveSvg white');
-    backIcon.attr('class', 'backIcon white');
-    backIcon.attr(
-        'style',
-        `height: 16px;
-        width: 16px;
-        display: block;
-        fill: #fff;`
-    );
-
-    const rdt_container = $('.rdt_container').first();
-    rdt_container.hide();
-    const fullScreen = $('.rdt__fullScreen').first();
-    fullScreen.addClass('block');
-    const roomId = $('#roomId').val();
-    let { images, userName } = await fetchRoomImages(roomId);
-    const innerContainer = $('#innerContainer');
-
-    images.forEach((image, index) => {
-        let imgHtml;
-        if (index === 0) {
-            imgHtml = `
-                        <img src="/airtnt/room_images/${userName}/${roomId}/${image.image}" id="${
-                image.id
-            }" class="bigImage active" data-index="${index + 1}"/>
-                    `;
-        } else {
-            imgHtml = `<img src="/airtnt/room_images/${userName}/${roomId}/${image.image}" id="${
-                image.id
-            }" class="bigImage" data-index="${index + 1}"/>`;
-        }
-
-        innerContainer.append(imgHtml);
-    });
-}
-
-async function fetchRoomImages(roomId) {
-    const { data } = await axios.get('/airtnt/homes/' + roomId);
-    return data;
-}
-
 function removeBetweenClass() {
     $('.dayInWeek.false').each(function () {
         if ($(this).hasClass('between')) $(this).removeClass('between');
