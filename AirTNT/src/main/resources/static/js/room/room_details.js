@@ -88,12 +88,15 @@ function setTotalPrice(manyDays) {
     manyDays *= 1;
 
     const totalRoomPrice = roomPrice * manyDays;
+    console.log(totalRoomPrice);
     const siteFee = totalRoomPrice * 0.05;
+
+    console.log(siteFee);
     totalPrice = totalRoomPrice + siteFee;
 
     $('#totalPrice').text(seperateNumber(manyDays * roomPrice));
-    $('#siteFee').text(seperateNumber(siteFee.toFixed(3)));
-    $('#finalTotalPrice').text(seperateNumber(totalPrice));
+    $('#siteFee').text(seperateNumber(Math.ceil(siteFee)));
+    $('#finalTotalPrice').text(seperateNumber(Math.ceil(totalPrice)));
 }
 
 function displayPreviewLine() {
@@ -274,6 +277,7 @@ async function fetchThePrevCoupleOfMonth(firstMonthAndYear, secondMonthAndYear, 
     let secondMonth;
     let copyMonth;
     let copyYear;
+
     if (month === 1) {
         secondMonth = await fetchDaysInMonth(10, year - 1);
         firstMonthAndYear.html(`Tháng 10 năm ${year - 1}`);
@@ -288,6 +292,13 @@ async function fetchThePrevCoupleOfMonth(firstMonthAndYear, secondMonthAndYear, 
 
         copyMonth = 11;
         copyYear = year - 1;
+    } else if (month === 3) {
+        secondMonth = await fetchDaysInMonth(1, year);
+        firstMonthAndYear.html(`Tháng 12 năm ${year - 1}`);
+        secondMonthAndYear.html(`Tháng 1 năm ${year}`);
+
+        copyMonth = 12;
+        copyYear = year - 1;
     } else {
         secondMonth = await fetchDaysInMonth(month - 3, year);
         firstMonthAndYear.html(`Tháng ${month * 1 - 3} năm ${year}`);
@@ -296,8 +307,8 @@ async function fetchThePrevCoupleOfMonth(firstMonthAndYear, secondMonthAndYear, 
         copyMonth = month * 1 - 3;
         copyYear = year;
     }
-    console.log(month);
-    const firstMonth = await fetchDaysInMonth(month - 4, year);
+
+    const firstMonth = await fetchDaysInMonth(copyMonth, copyYear);
 
     const rdt_calender__days = $('.rdt_calender__days').first();
     const rdt_calender__days_plus__1 = $('.rdt_calender__days_plus-1').first();
@@ -330,6 +341,9 @@ async function fetchTheNextCoupleOfMonth(firstMonthAndYear, secondMonthAndYear, 
     let secondMonth;
     let copyMonth;
     let copyYear;
+
+    console.log(month);
+
     if (month === 11) {
         secondMonth = await fetchDaysInMonth(0, year + 1);
         firstMonthAndYear.html(`Tháng 12 năm ${year}`);
@@ -353,18 +367,23 @@ async function fetchTheNextCoupleOfMonth(firstMonthAndYear, secondMonthAndYear, 
         copyYear = year;
     }
 
+    let decidedMonth = 0;
+    let dicidedYear = 0;
+    if (copyMonth === 12) {
+        decidedMonth = 1;
+        dicidedYear = copyYear + 1;
+    } else if (copyMonth === 1) decidedMonth = 2;
+    else decidedMonth = copyMonth + 1;
+
     const firstMonth = await fetchDaysInMonth(month, year);
 
     const rdt_calender__days = $('.rdt_calender__days').first();
     const rdt_calender__days_plus__1 = $('.rdt_calender__days_plus-1').first();
-
+    let daysInMonthJs2;
     const daysInMonthJs1 = getDaysInMonth(firstMonth.daysInMonth, copyMonth, copyYear);
-    let decidedMonth = 0;
-    if (copyMonth === 12) decidedMonth = 1;
-    else if (copyMonth === 1) decidedMonth = 2;
-    else decidedMonth = copyMonth + 1;
-
-    const daysInMonthJs2 = getDaysInMonth(secondMonth.daysInMonth, decidedMonth, copyYear);
+    if (copyMonth === 12) {
+        daysInMonthJs2 = getDaysInMonth(secondMonth.daysInMonth, decidedMonth, copyYear + 1);
+    } else daysInMonthJs2 = getDaysInMonth(secondMonth.daysInMonth, decidedMonth, copyYear);
 
     rdt_calender__days.empty();
     rdt_calender__days_plus__1.empty();
@@ -599,7 +618,7 @@ function addClickEventForDay() {
 
                 const [startDateDate, startDateMonth, startDateYear] = getElementsOfDate(startDate);
                 if (
-                    month2 < startDateMonth ||
+                    (month2 < startDateMonth && startDateYear > year2) ||
                     (month2 === startDateMonth && date2 < startDateDate)
                 ) {
                     alertify.error('Không thể chọn ngày bé hơn ngày bắt đầu');
