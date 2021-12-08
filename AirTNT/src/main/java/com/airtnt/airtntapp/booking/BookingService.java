@@ -268,4 +268,24 @@ public class BookingService {
     public Integer getRevenueInSpecificYear(Integer year) {
         return bookingRepository.getRevenueInSpecificYear(year);
     }
+
+    public Integer getNumberOfBookingComplete() {
+        return bookingRepository.getNumberOfBookingComplete();
+    }
+
+    public Integer getNumberOfBookingNotComplete() {
+        return bookingRepository.getNumberOfBookingNotComplete();
+    }
+
+    public Integer getNumberOfBookingRefund() {
+        return bookingRepository.getNumberOfBookingRefund();
+    }
+
+    public List<BookingStatsPerDayDTO> getBookingStatsPerDay(Integer month, Integer year) {
+        return bookingRepository.getBookingStatsPerDay(month, year);
+    }
+
+    public List<BookingStatsPerDayDTO> getBookingStatsPerMonth(Integer year) {
+        return bookingRepository.getBookingStatsPerMonth(year);
+    }
 }

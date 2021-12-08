@@ -42,6 +42,39 @@
             disabled
           />
         </div>
+
+        <div class="row justify-content-start mt-2">
+          <div class="col-sm-4 text-left mt-2">Number Of Bookings Complete</div>
+          <input
+            class="col-sm-8"
+            type="text"
+            th:value="${numberOfBookingsComplete}"
+            disabled
+          />
+        </div>
+
+        <div class="row justify-content-start mt-2">
+          <div class="col-sm-4 text-left mt-2">
+            Number Of Bookings Not Complete
+          </div>
+          <input
+            class="col-sm-8"
+            type="text"
+            th:value="${numberOfBookingsNotComplete}"
+            disabled
+          />
+        </div>
+
+        <div class="row justify-content-start mt-2">
+          <div class="col-sm-4 text-left mt-2">Number Of Bookings Refund</div>
+          <input
+            class="col-sm-8"
+            type="text"
+            th:value="${numberOfBookingsRefund}"
+            disabled
+          />
+        </div>
+
         <div class="row justify-content-start mt-2">
           <div class="col-sm-4 text-left mt-2">Revenue Bookings</div>
           <input

@@ -24,6 +24,26 @@
         />
       </div>
 
+      <div class="full-details table-responsive-xl">
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="thead-dark">
+            <th>day</th>
+            <th>total</th>
+          </thead>
+          <tbody>
+            <tr th:each="b : ${bookingStatsPerDayDTO}">
+              <td th:text="${#temporals.format(b.date, 'dd-MM-yyyy')}"></td>
+              <td>
+                $
+                <span
+                  th:text="${#numbers.formatDecimal(b.revenue, 0, 'COMMA', 2, 'POINT')}"
+                ></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div th:replace="fragments :: confirm_modal"></div>
 
       <div th:replace="fragments::footer"></div>

@@ -1,6 +1,9 @@
 package com.airtnt.airtntapp.stats;
 
+import java.util.List;
+
 import com.airtnt.airtntapp.booking.BookingService;
+import com.airtnt.airtntapp.booking.BookingStatsPerDayDTO;
 import com.airtnt.airtntapp.room.RoomService;
 import com.airtnt.airtntapp.user.UserService;
 
@@ -28,6 +31,9 @@ public class StatsAdminController {
         Integer numberOfUsers = userService.getNumberOfUser();
         Integer numberOfRooms = roomService.getNumberOfRoom();
         Integer numberOfBookings = bookingService.getNumberOfBooking();
+        Integer numberOfBookingsComplete = bookingService.getNumberOfBookingComplete();
+        Integer numberOfBookingsNotComplete = bookingService.getNumberOfBookingNotComplete();
+        Integer numberOfBookingsRefund = bookingService.getNumberOfBookingRefund();
         Integer totalRevenue = bookingService.getTotalRevenue();
         Integer numberOfBookingsInLastMonths = bookingService.getNumberOfBookingInLastMonth();
         Integer totalRevenueInLastMonths = bookingService.getTotalRevenueOfBookingInLastMonth();
@@ -35,6 +41,9 @@ public class StatsAdminController {
         model.addAttribute("numberOfUsers", numberOfUsers);
         model.addAttribute("numberOfRooms", numberOfRooms);
         model.addAttribute("numberOfBookings", numberOfBookings);
+        model.addAttribute("numberOfBookingsComplete", numberOfBookingsComplete);
+        model.addAttribute("numberOfBookingsNotComplete", numberOfBookingsNotComplete);
+        model.addAttribute("numberOfBookingsRefund", numberOfBookingsRefund);
         model.addAttribute("totalRevenue", totalRevenue);
         model.addAttribute("numberOfBookingsInLastMonths", numberOfBookingsInLastMonths);
         model.addAttribute("totalRevenueInLastMonths", totalRevenueInLastMonths);
@@ -48,7 +57,9 @@ public class StatsAdminController {
         )
     {
         Integer revenueInSpecificMonth= bookingService.getRevenueInSpecificMonthYear(month, year);
+        List<BookingStatsPerDayDTO> bookingStatsPerDayDTO = bookingService.getBookingStatsPerDay(month, year);
         model.addAttribute("revenueInSpecificMonth", revenueInSpecificMonth);
+        model.addAttribute("bookingStatsPerDayDTO", bookingStatsPerDayDTO);
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         return "stats/checkRevenue";
@@ -60,7 +71,9 @@ public class StatsAdminController {
         )
     {
         Integer revenueInSpecificYear= bookingService.getRevenueInSpecificYear(year);
+        List<BookingStatsPerDayDTO> bookingStatsPerMonthDTOs = bookingService.getBookingStatsPerMonth(year);
         model.addAttribute("revenueInSpecificYear", revenueInSpecificYear);
+        model.addAttribute("bookingStatsPerMonthDTOs", bookingStatsPerMonthDTOs);
         model.addAttribute("year", year);
         return "stats/checkRevenueYear";
     }
