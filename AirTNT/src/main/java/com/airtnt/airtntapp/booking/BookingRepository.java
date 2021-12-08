@@ -10,13 +10,11 @@ import com.airtnt.entity.Room;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, Integer>{
+public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
         public Booking findByCheckinDateAndCheckoutDate(Date checkinDate, Date checkoutDate);
 
@@ -50,7 +48,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
         @Query("SELECT b FROM Booking b WHERE b.room.id IN (:roomIds) AND b.id = :bookingId")
         public Page<Booking> getBookingsByRooms(Integer[] roomIds, Integer bookingId, Pageable pageable);
 
-        //admin -----------------------------
+        // admin -----------------------------
 
         @Query("SELECT b FROM Booking b WHERE CONCAT(b.customer.firstName, '',b.customer.lastName, '' , b.room.name) LIKE %?1%")
         public Page<Booking> findAllAdmin(String keyword, Pageable pageable);
@@ -70,10 +68,10 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
         @Query("SELECT sum(totalFee) FROM Booking b WHERE b.isComplete=true AND b.isRefund=false")
         public Integer getTotalRevenue();
 
-        @Query(value="SELECT count(*) FROM bookings b WHERE YEAR(b.booking_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(b.booking_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", nativeQuery=true)
+        @Query(value = "SELECT count(*) FROM bookings b WHERE YEAR(b.booking_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(b.booking_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)", nativeQuery = true)
         public Integer getNumberOfBookingInLastMonth();
 
-        @Query(value="SELECT sum(total_fee) FROM bookings b WHERE YEAR(b.booking_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(b.booking_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND b.is_complete=true AND b.is_refund=false", nativeQuery=true)
+        @Query(value = "SELECT sum(total_fee) FROM bookings b WHERE YEAR(b.booking_date) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(b.booking_date) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) AND b.is_complete=true AND b.is_refund=false", nativeQuery = true)
         public Integer getTotalRevenueOfBookingInLastMonth();
 
         @Query("SELECT sum(totalFee) FROM Booking b WHERE YEAR(b.bookingDate) = :year and MONTH(b.bookingDate) = :month AND b.isComplete=true AND b.isRefund=false")
@@ -82,9 +80,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer>{
         @Query("SELECT sum(totalFee) FROM Booking b WHERE YEAR(b.bookingDate) = :year AND b.isComplete=true AND b.isRefund=false")
         public Integer getRevenueInSpecificYear(Integer year);
 
-        @Query(value="SELECT b.booking_date as date, SUM(b.total_fee) as revenue FROM bookings b WHERE YEAR(b.booking_date) = :year AND MONTH(b.booking_date) = :month AND b.is_complete=true AND b.is_refund=false group by YEAR(b.booking_date), Month(b.booking_date), Day(b.booking_date) order by b.booking_date", nativeQuery=true)
+        @Query(value = "SELECT b.booking_date as date, SUM(b.total_fee) as revenue FROM bookings b WHERE YEAR(b.booking_date) = :year AND MONTH(b.booking_date) = :month AND b.is_complete=true AND b.is_refund=false group by YEAR(b.booking_date), Month(b.booking_date), Day(b.booking_date) order by b.booking_date", nativeQuery = true)
         public List<BookingStatsPerDayDTO> getBookingStatsPerDay(Integer month, Integer year);
 
-        @Query(value="SELECT b.booking_date as date, SUM(b.total_fee) as revenue FROM bookings b WHERE YEAR(b.booking_date) = :year AND b.is_complete=true AND b.is_refund=false group by YEAR(b.booking_date), Month(b.booking_date) order by b.booking_date", nativeQuery=true)
+        @Query(value = "SELECT b.booking_date as date, SUM(b.total_fee) as revenue FROM bookings b WHERE YEAR(b.booking_date) = :year AND b.is_complete=true AND b.is_refund=false group by YEAR(b.booking_date), Month(b.booking_date) order by b.booking_date", nativeQuery = true)
         public List<BookingStatsPerDayDTO> getBookingStatsPerMonth(Integer year);
 }

@@ -1,6 +1,8 @@
 package com.airtnt.airtntapp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.airtnt.airtntapp.amentity.AmentityService;
 import com.airtnt.airtntapp.category.CategoryService;
@@ -15,10 +17,12 @@ import com.airtnt.entity.RoomPrivacy;
 import com.airtnt.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,10 +49,25 @@ public class MainController {
     @GetMapping("/")
     public String index(@Param("categoryId") Integer categoryId,
             @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(value = "privacies", required = false, defaultValue = "") String privacies,
+            @RequestParam(value = "minPrice", required = false, defaultValue = "0") String minPrice,
+            @RequestParam(value = "maxPrice", required = false, defaultValue = "1000000000") String maxPrice,
+            @RequestParam(value = "bedRoom", required = false, defaultValue = "0") String bedRoom,
+            @RequestParam(value = "bed", required = false, defaultValue = "0") String bed,
+            @RequestParam(value = "bathRoom", required = false, defaultValue = "0") String bathRoom,
+            @RequestParam(value = "amentities", required = false, defaultValue = "") String amentitiesFilter,
             Model model) {
         if (categoryId == null) {
             return "redirect:/?categoryId=1";
         }
+        Map<String, String> filters = new HashMap<>();
+        filters.put("privacies", privacies);
+        filters.put("minPrice", minPrice);
+        filters.put("maxPrice", maxPrice);
+        filters.put("bedRoom", bedRoom);
+        filters.put("bed", bed);
+        filters.put("bathRoom", bathRoom);
+        filters.put("amentities", amentitiesFilter);
 
         // Category
         List<Category> categories = categoryService.getAllCategory();
@@ -67,7 +86,7 @@ public class MainController {
             model.addAttribute("wishlists", roomIds);
         }
 
-        List<Room> rooms = roomService.getRoomsByCategoryId(categoryId, true, 1);
+        Page<Room> rooms = roomService.getRoomsByCategoryId(categoryId, true, 1, filters);
         model.addAttribute("rooms", rooms);
         if (user == null)
             model.addAttribute("user", null);
@@ -75,11 +94,11 @@ public class MainController {
             model.addAttribute("user", user.getFullName());
 
         float averageRoomPrice = 0;
-        if (rooms.size() > 0) {
+        if (rooms.getSize() > 0) {
             for (Room room : rooms) {
                 averageRoomPrice += room.getPrice();
             }
-            averageRoomPrice /= rooms.size();
+            averageRoomPrice /= rooms.getSize();
             model.addAttribute("averageRoomPrice", averageRoomPrice);
         } else
             model.addAttribute("averageRoomPrice", 0);

@@ -40,7 +40,7 @@ import com.airtnt.entity.Exception.RoomNotFoundException;
 @Transactional
 public class RoomService {
 	public static final int MAX_ROOM_PER_FETCH = 40;
-	public static final int MAX_ROOM_PER_FETCH_BY_HOST = 8;
+	public static final int MAX_ROOM_PER_FETCH_BY_HOST = 10;
 	public static final int ROOMS_PER_PAGE = 10;
 
 	@Autowired
@@ -156,10 +156,68 @@ public class RoomService {
 		return rooms;
 	}
 
-	public List<Room> getRoomsByCategoryId(Integer categoryId, boolean status, int page) {
-		Pageable pageable = PageRequest.of(page - 1, MAX_ROOM_PER_FETCH);
-		List<Room> rooms = roomRepository.getByCategoryAndStatus(categoryId, status, pageable);
-		return rooms;
+	public Page<Room> getRoomsByCategoryId(Integer categoryId, boolean status, int pageNumber,
+			Map<String, String> filters) {
+		float minPrice = Float.parseFloat(filters.get("minPrice"));
+		float maxPrice = Float.parseFloat(filters.get("maxPrice"));
+		int bedroomCount = Integer.parseInt(filters.get("bedRoom"));
+		int bedCount = Integer.parseInt(filters.get("bed"));
+		int bathroomCount = Integer.parseInt(filters.get("bathRoom"));
+
+		List<Integer> amentitiesID = new ArrayList<>();
+		List<Integer> privaciesID = new ArrayList<>();
+
+		if (!filters.get("privacies").isEmpty()) {
+			String[] privacies = filters.get("privacies").split(" ");
+
+			for (int i = 0; i < privacies.length; i++) {
+				privaciesID.add(Integer.parseInt(privacies[i]));
+			}
+		}
+		if (!filters.get("amentities").isEmpty()) {
+			String[] amentities = filters.get("amentities").split(" ");
+
+			for (int i = 0; i < amentities.length; i++) {
+				amentitiesID.add(Integer.parseInt(amentities[i]));
+			}
+		}
+
+		Pageable pageable = PageRequest.of(pageNumber - 1, MAX_ROOM_PER_FETCH);
+		if (amentitiesID.size() == 0) {
+			return roomRepository.findAll(new Specification<Room>() {
+				@Override
+				public Predicate toPredicate(Root<Room> root, CriteriaQuery<?> query,
+						CriteriaBuilder criteriaBuilder) {
+					List<Predicate> predicates = new ArrayList<>();
+					predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("category"), categoryId)));
+					predicates.add(criteriaBuilder
+							.and(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice)));
+					predicates.add(criteriaBuilder
+							.and(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice)));
+					predicates.add(criteriaBuilder
+							.and(criteriaBuilder.greaterThanOrEqualTo(root.get("bedroomCount"),
+									bedroomCount)));
+					predicates.add(criteriaBuilder
+							.and(criteriaBuilder.greaterThanOrEqualTo(root.get("bathroomCount"),
+									bathroomCount)));
+					predicates.add(
+							criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("bedCount"),
+									bedCount)));
+
+					if (privaciesID.size() > 0) {
+						Expression<Boolean> roomPrivacyId = root.get("privacyType.id");
+						Predicate predicate = roomPrivacyId.in(privaciesID);
+						predicates.add(predicate);
+					}
+
+					return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+				}
+			}, pageable);
+		}
+
+		return roomRepository.getByCategoryAndStatus(categoryId, status,
+				privaciesID, minPrice,
+				maxPrice, bedroomCount, bedCount, bathroomCount, amentitiesID, pageable);
 	}
 
 	public int updateRoomStatus(Integer roomId) {
@@ -337,7 +395,7 @@ public class RoomService {
 		roomRepository.deleteById(id);
 	}
 
-	public Integer getNumberOfRoom(){
+	public Integer getNumberOfRoom() {
 		return roomRepository.getNumberOfRoom();
 	}
 

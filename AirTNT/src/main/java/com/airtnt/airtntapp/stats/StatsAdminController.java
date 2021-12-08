@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,7 +26,7 @@ public class StatsAdminController {
     BookingService bookingService;
 
     @GetMapping("/stats")
-    public String stats(Model model){
+    public String stats(Model model) {
         Integer numberOfUsers = userService.getNumberOfUser();
         Integer numberOfRooms = roomService.getNumberOfRoom();
         Integer numberOfBookings = bookingService.getNumberOfBooking();
@@ -52,11 +51,9 @@ public class StatsAdminController {
 
     @PostMapping("/stats/checkRevenue")
     public String checkRevenue(Model model,
-        @Param("month") Integer month,
-        @Param("year") Integer year
-        )
-    {
-        Integer revenueInSpecificMonth= bookingService.getRevenueInSpecificMonthYear(month, year);
+            @Param("month") Integer month,
+            @Param("year") Integer year) {
+        Integer revenueInSpecificMonth = bookingService.getRevenueInSpecificMonthYear(month, year);
         List<BookingStatsPerDayDTO> bookingStatsPerDayDTO = bookingService.getBookingStatsPerDay(month, year);
         model.addAttribute("revenueInSpecificMonth", revenueInSpecificMonth);
         model.addAttribute("bookingStatsPerDayDTO", bookingStatsPerDayDTO);
@@ -67,10 +64,8 @@ public class StatsAdminController {
 
     @PostMapping("/stats/checkRevenueYear")
     public String checkRevenueYear(Model model,
-        @Param("year") Integer year
-        )
-    {
-        Integer revenueInSpecificYear= bookingService.getRevenueInSpecificYear(year);
+            @Param("year") Integer year) {
+        Integer revenueInSpecificYear = bookingService.getRevenueInSpecificYear(year);
         List<BookingStatsPerDayDTO> bookingStatsPerMonthDTOs = bookingService.getBookingStatsPerMonth(year);
         model.addAttribute("revenueInSpecificYear", revenueInSpecificYear);
         model.addAttribute("bookingStatsPerMonthDTOs", bookingStatsPerMonthDTOs);

@@ -474,11 +474,27 @@
                     $(this).click(function () {
                         let choosenPrivacy = [];
                         $('input[name="privacyFilter"]:checked').each(function () {
-                            choosenPrivacy.push($(this).val());
+                            choosenPrivacy.push($(this).val() * 1);
                         });
 
-                        const minPrice = $('#min-input__modify').val();
+                        const minPrice = $('#min-input__modify').val().replace(/\./g, '');
                         const maxPrice = $('#max-input__modify').val();
+
+                        const bedRoomCount = $('#listings__bed-room-count').text() * 1;
+                        const bedCount = $('#listings__bed-count').text() * 1;
+                        const bathRoomCount = $('#listings__bath-room-count').text() * 1;
+
+                        const selectedAmentities = [];
+                        $('input[class="amentitySelected"]:checked').each(function () {
+                            selectedAmentities.push($(this).val() * 1);
+                        });
+
+                        const currentHref = window.location.href;
+                        window.location.href = `${currentHref}&privacies=${choosenPrivacy.join(
+                            ' '
+                        )}&minPrice=${minPrice}&maxPrice=${maxPrice}&bedRoom=${bedRoomCount}&bed=${bedCount}&bathRoom=${bathRoomCount}&amentities=${selectedAmentities.join(
+                            ' '
+                        )}`;
                     });
                 });
             });

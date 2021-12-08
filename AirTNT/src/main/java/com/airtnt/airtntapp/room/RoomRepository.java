@@ -15,8 +15,19 @@ import com.airtnt.entity.User;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer>, JpaSpecificationExecutor<Room> {
+        @Query("SELECT r FROM Room r JOIN r.amentities ra WHERE r.category.id = :categoryId AND r.status = :status" +
+                        " AND r.price >= :minPrice AND r.price <= :maxPrice" +
+                        " AND r.bedroomCount >= :bedroomCount AND r.bathroomCount >= :bathroomCount AND r.bedCount >= :bedCount"
+                        +
+                        " AND ra.id IN (:amentitiesID) AND r.privacyType.id IN (:privacies)")
+        public Page<Room> getByCategoryAndStatus(Integer categoryId, boolean status,
+                        @Param("privacies") List<Integer> privacies, float minPrice, float maxPrice, int bedroomCount,
+                        int bedCount,
+                        int bathroomCount, @Param("amentitiesID") List<Integer> amentitiesID, Pageable pageable);
+
         @Query("SELECT r FROM Room r WHERE r.category.id = :categoryId AND r.status = :status")
-        public List<Room> getByCategoryAndStatus(Integer categoryId, boolean status, Pageable pageable);
+        public Page<Room> getByCategoryAndStatus(Integer categoryId, boolean status,
+                        Pageable pageable);
 
         public List<Room> findByHost(User host);
 
