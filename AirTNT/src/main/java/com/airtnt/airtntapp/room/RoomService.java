@@ -24,6 +24,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.airtnt.airtntapp.FileUploadUtil;
+import com.airtnt.airtntapp.city.CityRepository;
+import com.airtnt.airtntapp.country.CountryRepository;
+import com.airtnt.airtntapp.state.StateRepository;
 import com.airtnt.airtntapp.user.UserRepository;
 import com.airtnt.entity.Amentity;
 import com.airtnt.entity.Category;
@@ -48,6 +51,15 @@ public class RoomService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private CountryRepository countryRepository;
+
+	@Autowired
+	private StateRepository stateRepository;
+
+	@Autowired
+	private CityRepository cityRepository;
 
 	public Room save(Room room) {
 		return roomRepository.save(room);
@@ -189,7 +201,8 @@ public class RoomService {
 				public Predicate toPredicate(Root<Room> root, CriteriaQuery<?> query,
 						CriteriaBuilder criteriaBuilder) {
 					List<Predicate> predicates = new ArrayList<>();
-					predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("category"), categoryId)));
+					predicates.add(
+							criteriaBuilder.and(criteriaBuilder.equal(root.get("category").get("id"), categoryId)));
 					predicates.add(criteriaBuilder
 							.and(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice)));
 					predicates.add(criteriaBuilder
@@ -205,7 +218,7 @@ public class RoomService {
 									bedCount)));
 
 					if (privaciesID.size() > 0) {
-						Expression<Boolean> roomPrivacyId = root.get("privacyType.id");
+						Expression<Boolean> roomPrivacyId = root.get("privacyType").get("id");
 						Predicate predicate = roomPrivacyId.in(privaciesID);
 						predicates.add(predicate);
 					}
@@ -265,9 +278,19 @@ public class RoomService {
 				break;
 			}
 			case "location": {
-				Country country = new Country(Integer.parseInt(values.get("country")));
+				Country country = new Country(216);
 				State state = new State(values.get("state"), country);
 				City city = new City(values.get("city"), state);
+
+				State state2;
+				state2 = stateRepository.findByName(values.get("state"));
+				if (state2 == null)
+					state2 = stateRepository.save(state);
+
+				City city2;
+				city2 = cityRepository.findByName(values.get("city"));
+				if (city2 == null)
+					city2 = cityRepository.save(city);
 
 				System.out.println(values.get("country"));
 				System.out.println(values.get("city"));
@@ -275,12 +298,12 @@ public class RoomService {
 				System.out.println(values.get("street"));
 
 				room.setCountry(country);
-				room.setState(state);
-				room.setCity(city);
+				room.setState(state2);
+				room.setCity(city2);
 				room.setStreet(values.get("street"));
+				break;
 			}
 			case "status": {
-
 				int request = Integer.parseInt(values.get("status"));
 
 				if (request == 1) {

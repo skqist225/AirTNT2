@@ -85,7 +85,7 @@
                     </div>
 
                     <div th:if="${turnOffEditModeArgs1 == 'sex'}">
-                        <select class="custom-select">
+                        <select class="custom-select" name="userSex">
                             <option disabled value="">Chọn</option>
                             <option th:selected="${userSex == 'Nam'}" value="MALE">Nam</option>
                             <option th:selected="${userSex == 'Nữ'}" value="FEMALE">Nữ</option>
