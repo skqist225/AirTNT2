@@ -474,7 +474,7 @@ function onKeyDown(event, inputId) {
 }
 
 function previewRoom() {
-    window.location.href = `${baseURL}rooms/${roomId}`;
+    window.location.href = `${baseURL}room/${roomId}`;
 }
 
 function redirectToPhotoPage() {

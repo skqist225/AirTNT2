@@ -398,7 +398,7 @@ public class RoomService {
 				return false;
 		} else {
 			if (room.getId() != id) {
-				return false;
+				return true;
 			}
 		}
 
