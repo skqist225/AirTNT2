@@ -68,9 +68,19 @@
                         </th:block>
                     </div>
                     <div id="index__filter-container">
-                        <!-- <div>
-                            <input type="date" class="form-control" />
-                        </div> -->
+                        <div>
+                            <button class="filterButton" onclick="resetURL();">
+                                <span
+                                    style="
+                                        font-size: 14px;
+                                        color: #222;
+                                        margin-left: 6px;
+                                        display: inline-block;
+                                    "
+                                    >Xóa bộ lọc</span
+                                >
+                            </button>
+                        </div>
 
                         <div>
                             <button class="filterButton" onclick="displayEditThumbnailBox();">
@@ -270,7 +280,7 @@
                                             type="range"
                                             class="form-range"
                                             min="0"
-                                            max="1000000"
+                                            max="10000000"
                                             id="roomPriceRange"
                                             onchange="updateTextInput(this.value);"
                                             style="width: 400px"
@@ -472,6 +482,10 @@
 
                 $('#index__filter-btn').click(function () {
                     $(this).click(function () {
+                        const categoryId = new URLSearchParams(window.location.search).get(
+                            'categoryId'
+                        );
+
                         let choosenPrivacy = [];
                         $('input[name="privacyFilter"]:checked').each(function () {
                             choosenPrivacy.push($(this).val() * 1);
@@ -489,8 +503,7 @@
                             selectedAmentities.push($(this).val() * 1);
                         });
 
-                        const currentHref = window.location.href;
-                        window.location.href = `${currentHref}&privacies=${choosenPrivacy.join(
+                        window.location.href = `${baseURL}?categoryId=${categoryId}&privacies=${choosenPrivacy.join(
                             ' '
                         )}&minPrice=${minPrice}&maxPrice=${maxPrice}&bedRoom=${bedRoomCount}&bed=${bedCount}&bathRoom=${bathRoomCount}&amentities=${selectedAmentities.join(
                             ' '
@@ -498,6 +511,10 @@
                     });
                 });
             });
+
+            function resetURL() {
+                window.location.href = `${baseURL}?categoryId=1`;
+            }
 
             function hideEditThumbnailBox() {
                 $('.radioThumbnail').each(function () {

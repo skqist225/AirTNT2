@@ -1,8 +1,8 @@
 const getIndex = (array, index) => {
     array.each(function () {
-        if ($(this).hasClass(active)) {
+        if ($(this).hasClass('active')) {
             index = $(this).attr('data-index') * 1;
-            $(this).removeClass(active);
+            $(this).removeClass('active');
             return false;
         }
     });
@@ -12,7 +12,7 @@ const getIndex = (array, index) => {
 const addActiveClass = (array, index) => {
     array.each(function () {
         if ($(this).attr('data-index') * 1 === index) {
-            $(this).addClass(active);
+            $(this).addClass('active');
         }
     });
 };

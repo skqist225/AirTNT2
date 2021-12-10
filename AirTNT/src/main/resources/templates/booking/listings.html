@@ -35,20 +35,6 @@
                     <div class="listings__header-rooms-length">
                         [[${totalBookings}]] đơn đặt phòng
                     </div>
-                    <!-- <div>
-                        <button class="listings__create-new-room" onclick="createNewRoom();">
-                            <span>
-                                <img
-                                    th:src="@{/svg/plus.svg}"
-                                    alt=""
-                                    width="16px"
-                                    height="16px"
-                                    style="object-fit: cover"
-                                />
-                            </span>
-                            <div style="margin-left: 10px">Tạo mục cho thuê</div>
-                        </button>
-                    </div> -->
                 </div>
                 <div class="listings__filter-container">
                     <div class="listings__search-room">
@@ -434,6 +420,10 @@
             }
             function approveBooking(self) {
                 window.location.href = `${baseURL}booking/${self.data('booking-id')}/approved`;
+            }
+
+            function viewBooking(self) {
+                window.location.href = `${baseURL}booking/${self.data('booking-id')}/view`;
             }
         </script>
     </body>

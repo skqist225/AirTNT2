@@ -159,7 +159,7 @@ public class RoomRestController {
             Path sourcePath = Paths.get(source);
             Path targetPath = Files.createDirectories(Paths.get(uploadDir));
             for (String imageName : payload.getImages()) {
-                Files.copy(sourcePath.resolve(imageName), targetPath.resolve(imageName),
+                Files.move(sourcePath.resolve(imageName), targetPath.resolve(imageName),
                         StandardCopyOption.REPLACE_EXISTING);
             }
         }

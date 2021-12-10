@@ -2,7 +2,6 @@ jQuery(document).ready(function () {
     if (localStorage.getItem('room')) {
         const room = JSON.parse(localStorage.getItem('room'));
         const privacyType = room.privacyType.toString();
-        const userName = /*[[${userName}]]*/ 'default';
 
         $('#roomThumbnail').attr(
             'src',

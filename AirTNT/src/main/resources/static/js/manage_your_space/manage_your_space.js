@@ -279,9 +279,9 @@ async function updateField(fieldName, dataInput) {
             }
         }
         case 'roomInfo': {
-            const bedroom2 = $('#manage-ys__bedRoom').text();
-            const bed2 = $('#manage-ys__bed').text();
-            const bathroom2 = $('#manage-ys__bathRoom').text();
+            const bedroom2 = $('#manage-ys__bedRoom').text().trim();
+            const bed2 = $('#manage-ys__bed').text().trim();
+            const bathroom2 = $('#manage-ys__bathRoom').text().trim();
 
             const { data } = await axios.post(postURL, {
                 bedroom: bedroom2,
@@ -474,7 +474,7 @@ function onKeyDown(event, inputId) {
 }
 
 function previewRoom() {
-    window.location.href = `${baseURL}rooms/${roomId}`;
+    window.location.href = `${baseURL}room/${roomId}`;
 }
 
 function redirectToPhotoPage() {

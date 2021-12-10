@@ -350,7 +350,8 @@
                         <button
                             class="listings__complete-room-making listings__td-text"
                             th:if="${booking.isComplete == true} and ${booking.isRefund == false}"
-                            onclick=""
+                            th:data-booking-id="${booking.id}"
+                            onclick="viewBooking($(this));"
                         >
                             Xem đơn đặt phòng
                         </button>

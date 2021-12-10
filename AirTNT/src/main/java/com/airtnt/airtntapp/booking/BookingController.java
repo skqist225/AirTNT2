@@ -1,11 +1,13 @@
 package com.airtnt.airtntapp.booking;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.airtnt.airtntapp.room.RoomService;
+import com.airtnt.airtntapp.user.RatingDTO;
 import com.airtnt.airtntapp.user.UserService;
 import com.airtnt.entity.Booking;
 import com.airtnt.entity.Room;
@@ -105,6 +107,43 @@ public class BookingController {
         return new String("booking/listings");
     }
 
+    @GetMapping(value = "{bookingId}/view")
+    public String viewBooking(@PathVariable("bookingId") Integer bookingId,
+            @AuthenticationPrincipal UserDetails userDetails, Model model) {
+        Booking booking = bookingService.findById(bookingId);
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(booking);
+        User user = null;
+        if (userDetails != null) {
+            user = userService.getByEmail(userDetails.getUsername());
+            Integer[] roomIds = new Integer[user.getRooms().size()];
+            int i = 0;
+            for (Room r : user.getRooms())
+                roomIds[i++] = r.getId();
+            model.addAttribute("wishlists", roomIds);
+        }
+        if (user == null)
+            model.addAttribute("user", null);
+        else
+            model.addAttribute("user", user.getFullName());
+
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("includeMiddle", true);
+        model.addAttribute("excludeBecomeHostAndNavigationHeader", true);
+        Integer[] starLoop = new Integer[] { 1, 2, 3, 4, 5 };
+        String[] ratingLabel = new String[] { "Mức độ sạch sẽ", "Độ chính xác", "Liên lạc", "Vị trí", "Nhận phòng",
+                "Giá trị" };
+
+        List<RatingDTO> ratings = new ArrayList<>();
+        for (int i = 0; i < ratingLabel.length; i++) {
+            ratings.add(new RatingDTO(ratingLabel[i], starLoop));
+        }
+
+        model.addAttribute("ratings", ratings);
+        model.addAttribute("removeReview", true);
+        return new String("user/bookings");
+    }
+
     @GetMapping(value = "/{bookingId}/cancel")
     public String getMethodName(@PathVariable("bookingId") Integer bookingId,
             @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
@@ -133,7 +172,7 @@ public class BookingController {
         else
             redirectAttributes.addAttribute("approveMessage", "Duyệt lịch đặt phòng thất bại");
 
-        return "redirect:/book/listings/1"; 
+        return "redirect:/booking/listings/1";
     }
 
 }

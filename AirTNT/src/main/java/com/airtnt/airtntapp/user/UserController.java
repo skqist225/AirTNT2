@@ -22,6 +22,7 @@ import com.airtnt.entity.City;
 import com.airtnt.entity.Country;
 import com.airtnt.entity.Review;
 import com.airtnt.entity.Room;
+import com.airtnt.entity.Sex;
 import com.airtnt.entity.State;
 import com.airtnt.entity.SubRating;
 import com.airtnt.entity.User;
@@ -178,6 +179,7 @@ public class UserController {
     public String updatePersonalInfo(User user,
             @RequestParam(name = "userAvatar", required = false) MultipartFile userAvatar,
             @RequestParam(name = "updatedField") String updatedField,
+            @RequestParam(name = "userSex", required = false) String userSex,
             @RequestParam(name = "newPassword", required = false) String newPassword,
             @RequestParam(name = "userDayOfBirth", required = false) Integer userDayOfBirth,
             @RequestParam(name = "userMonthOfBirth", required = false) Integer userMonthOfBirth,
@@ -223,6 +225,12 @@ public class UserController {
             savedUser = userService.saveUser(currentUser);
         }
 
+        if (updatedField.equals("sex")) {
+            Sex sex = userSex.equals("MALE") ? Sex.MALE : userSex.equals("FEMALE") ? Sex.FEMALE : Sex.OTHER;
+            currentUser.setSex(sex);
+            savedUser = userService.saveUser(currentUser);
+        }
+
         if (updatedField.equals("email")) {
             currentUser.setEmail(user.getEmail());
             savedUser = userService.saveUser(currentUser);
@@ -242,17 +250,6 @@ public class UserController {
             Country country = countryService.getCountryById(countryId);
             State state = stateService.getStateById(stateId);
             City city = cityService.getCityById(cityId);
-            // if (state == null) { // does not exist in db
-            // System.out.println("state is not existed");
-            // String stateCode = request.getParameter(stateName);
-            // state = stateService.addState(stateName, stateCode, country);
-            // }
-
-            // if (city == null) {
-            // System.out.println("city is not existed");
-            // // String cityCode = request.getParameter(cityName);
-            // city = cityService.addCity(cityName, state);
-            // }
             String aprtNoAndStreet = request.getParameter("address.aprtNoAndStreet");
             Address newAddress = new Address(country, state, city, aprtNoAndStreet);
             currentUser.setAddress(newAddress);

@@ -50,7 +50,7 @@
                                 <div class="checkinAndcheckoutTitle">
                                     [[${checkin}]] - [[${checkout}]]
                                 </div>
-                            </div> 
+                            </div>
                             <div>
                                 <button class="booking__transparent-btn">Chỉnh sửa</button>
                             </div>
@@ -190,9 +190,10 @@
                 const totalRoomPrice = roomPrice * numberOfNights;
                 const siteFee = totalRoomPrice * 0.05;
                 totalPrice = totalRoomPrice + siteFee;
+
                 $('#totalRoomPrice').text(seperateNumber(totalRoomPrice));
-                $('#siteFee').text(seperateNumber(siteFee));
-                $('#totalPrice').text(seperateNumber(totalPrice));
+                $('#siteFee').text(seperateNumber(Math.ceil(siteFee)));
+                $('#totalPrice').text(seperateNumber(Math.ceil(totalPrice)));
 
                 const stripe = Stripe(stripePublicKey);
 
