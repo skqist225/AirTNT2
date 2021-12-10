@@ -1,0 +1,29 @@
+Vagrant.configure("2") do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  if Vagrant.has_plugin? "vagrant-vbguest"
+    config.vbguest.no_install  = true
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote   = true
+  end
+
+### DB and tomcat vm  ####
+  config.vm.define "db01_app01" do |db01_app01|
+    db01_app01.vm.box = "geerlingguy/centos7"
+    db01_app01.vm.hostname = "db01_app01"
+    db01_app01.vm.network "private_network", ip: "192.168.33.15"
+    db01_app01.vm.provision "shell", path: "mysql_tomcat.sh"
+    db01_app01.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+   end
+  end
+
+### Nginx VM ###
+  config.vm.define "web01" do |web01|
+    web01.vm.box = "ubuntu/xenial64"
+    web01.vm.hostname = "web01"
+  web01.vm.network "private_network", ip: "192.168.33.11"
+  web01.vm.provision "shell", path: "nginx.sh"
+  end
+
+end
