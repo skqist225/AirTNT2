@@ -9,7 +9,7 @@ sudo yum install mariadb-server -y
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 cd /tmp/
-git clone -b local-setup https://github.com/devopshydclub/vprofile-project.git
+git clone https://github.com/skqist225/AirTNT2.git
 #restore the dump file for the application
 sudo mysqladmin -u root password "$DATABASE_PASS"
 sudo mysql -u root -p"$DATABASE_PASS" -e "UPDATE mysql.user SET Password=PASSWORD('$DATABASE_PASS') WHERE User='root'"
@@ -17,15 +17,14 @@ sudo mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.user WHERE User='roo
 sudo mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.user WHERE User=''"
 sudo mysql -u root -p"$DATABASE_PASS" -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
 sudo mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
-sudo mysql -u root -p"$DATABASE_PASS" -e "create database accounts"
-sudo mysql -u root -p"$DATABASE_PASS" -e "grant all privileges on accounts.* TO 'admin'@'localhost' identified by 'admin123'"
-sudo mysql -u root -p"$DATABASE_PASS" -e "grant all privileges on accounts.* TO 'admin'@'%' identified by 'admin123'"
-sudo mysql -u root -p"$DATABASE_PASS" accounts < /tmp/vprofile-project/src/main/resources/db_backup.sql
+sudo mysql -u root -p"$DATABASE_PASS" -e "create database airtnt"
+sudo mysql -u root -p"$DATABASE_PASS" -e "grant all privileges on airtnt.* TO 'root'@'localhost' identified by '123456'"
+sudo mysql -u root -p"$DATABASE_PASS" -e "grant all privileges on airtnt.* TO 'root'@'%' identified by '123456'"
+sudo mysql -u root -p"$DATABASE_PASS" airtnt < /tmp/AirTNT2/AirTNT/airtnt.sql
 sudo mysql -u root -p"$DATABASE_PASS" -e "FLUSH PRIVILEGES"
 
 # Restart mariadb-server
 sudo systemctl restart mariadb
-
 
 #starting the firewall and allowing the mariadb to access from port no. 3306
 sudo systemctl start firewalld
@@ -54,22 +53,18 @@ Description=Tomcat
 After=network.target
 
 [Service]
-
 User=tomcat
 Group=tomcat
-
 WorkingDirectory=/usr/local/tomcat8
 
 #Environment=JRE_HOME=/usr/lib/jvm/jre
 Environment=JAVA_HOME=/usr/lib/jvm/jre
-
 Environment=CATALINA_PID=/var/tomcat/%i/run/tomcat.pid
 Environment=CATALINA_HOME=/usr/local/tomcat8
 Environment=CATALINE_BASE=/usr/local/tomcat8
 
 ExecStart=/usr/local/tomcat8/bin/catalina.sh run
 ExecStop=/usr/local/tomcat8/bin/shutdown.sh
-
 
 RestartSec=10
 Restart=always
@@ -83,14 +78,13 @@ systemctl daemon-reload
 systemctl start tomcat
 systemctl enable tomcat
 
-git clone -b local-setup https://github.com/devopshydclub/vprofile-project.git
-cd vprofile-project
+cd /tmp/AirTNT2/AirTNT/
 mvn install
 systemctl stop tomcat
 sleep 60
 rm -rf /usr/local/tomcat8/webapps/ROOT*
-cp target/vprofile-v2.war /usr/local/tomcat8/webapps/ROOT.war
+cp /target/AirTNT-0.0.1-SNAPSHOT.war /usr/local/tomcat8/webapps/ROOT.war
 systemctl start tomcat
 sleep 120
-cp /vagrant/application.properties /usr/local/tomcat8/webapps/ROOT/WEB-INF/classes/application.properties
+cp /src/main/resources/application.properties /usr/local/tomcat8/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat
