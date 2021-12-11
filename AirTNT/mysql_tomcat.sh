@@ -4,7 +4,7 @@ sudo yum update -y
 sudo yum install epel-release -y
 sudo yum install git zip unzip -y
 sudo yum install mariadb-server -y
-sudo yum install java-1.8.0-openjdk -y
+yum install java-1.8.0-openjdk -y
 sudo yum install wget -y
 
 # starting & enabling mariadb-server
@@ -57,11 +57,13 @@ After=network.target
 
 [Service]
 Type=forking
+
 User=tomcat
 Group=tomcat
 
-Environment="JAVA_HOME=/usr/lib/jvm/jre"
+Environment="JAVA_HOME=/usr/lib/jvm/jre-openjdk"
 Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
+
 Environment="CATALINA_BASE=/opt/tomcat/latest"
 Environment="CATALINA_HOME=/opt/tomcat/latest"
 Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
@@ -73,6 +75,7 @@ ExecStop=/opt/tomcat/latest/bin/shutdown.sh
 [Install]
 WantedBy=multi-user.target
 EOT
+exit
 
 sudo systemctl daemon-reload
 sudo systemctl start tomcat
@@ -83,18 +86,18 @@ sudo firewall-cmd --reload
 # MAVEN
 wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
-sudo chmod +x /opt/apache-maven-3.6.3
 sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
-sudo rm -rf /etc/profile.d/maven.sh
 sudo -i
 cat <<EOT>> /etc/profile.d/maven.sh
+	export JAVA_HOME=/usr/lib/jvm/jre-openjdk
     export M2_HOME=/opt/maven
     export MAVEN_HOME=/opt/maven
     export PATH=${M2_HOME}/bin:${PATH}
 EOT
+exit
 sudo chmod +x /etc/profile.d/maven.sh
 source /etc/profile.d/maven.sh
-export PATH=$PATH:/opt/maven/bin
+sudo systemctl daemon-reload
 sleep 30
 
 cd /tmp/AirTNT2/AirTNT/
