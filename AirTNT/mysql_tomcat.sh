@@ -5,7 +5,9 @@ sudo yum install epel-release -y
 sudo yum install git zip unzip -y
 sudo yum install mariadb-server -y
 sudo yum install java-1.8.0-openjdk -y
+sudo yum install java-1.8.0-openjdk-devel -y
 sudo yum install wget -y
+sudo yum install nano -y
 
 # starting & enabling mariadb-server
 sudo systemctl start mariadb
@@ -37,20 +39,20 @@ sudo firewall-cmd --reload
 sudo systemctl restart mariadb
 
 
-useradd --shell /sbin/nologin tomcat
+sudo useradd --shell /sbin/nologin tomcat
 # TOMCAT 
 cd /tmp/
 wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.56/bin/apache-tomcat-9.0.56.tar.gz
 
-tar -xf apache-tomcat-9.0.56.tar.gz
-sudo mv apache-tomcat-9.0.56 /opt/tomcat/
+sudo mkdir /opt/tomcat/
+sudo tar -xf apache-tomcat-9.0.56.tar.gz -C /opt/tomcat/
 sudo sh -c 'chmod +x /opt/tomcat/apache-tomcat-9.0.56/bin/*.sh'
 sudo ln -s /opt/tomcat/apache-tomcat-9.0.56 /opt/tomcat/latest
 sudo chown -R tomcat: /opt/tomcat
 
-rm -rf /etc/systemd/system/tomcat.service
+sudo rm -rf /etc/systemd/system/tomcat.service
 sudo -i
-cat <<EOT>> /etc/systemd/system/tomcat.service
+sudo cat <<EOT>> /etc/systemd/system/tomcat.service
 [Unit]
 Description=Tomcat 9 servlet container
 After=network.target
@@ -83,25 +85,19 @@ sudo systemctl enable tomcat
 sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
 
-# MAVEN
+# # MAVEN
 wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
 sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
-sudo -i
-cat <<EOT>> /etc/profile.d/maven.sh
-	export JAVA_HOME=/usr/lib/jvm/jre-openjdk
-    export M2_HOME=/opt/maven
-    export MAVEN_HOME=/opt/maven
-    export PATH=${M2_HOME}/bin:${PATH}
-EOT
-exit
-sudo chmod +x /etc/profile.d/maven.sh
-source /etc/profile.d/maven.sh
-sudo systemctl daemon-reload
-sleep 30
+
+export JAVA_HOME=/usr/lib/jvm/jre-openjdk
+export M2_HOME=/opt/maven
+export MAVEN_HOME=/opt/maven
+export PATH=${M2_HOME}/bin:${PATH}
 
 cd /tmp/AirTNT2/AirTNT/
 mvn install
+sudo -i
 systemctl stop tomcat
 sleep 30
 rm -rf /opt/tomcat/latest/webapps/ROOT*
