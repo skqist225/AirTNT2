@@ -40,6 +40,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		String absolutePath = path.toFile().getAbsolutePath();
 
 		String logicalPath = pathPattern.replace("..", "") + "/**";
-		registry.addResourceHandler(logicalPath).addResourceLocations("file://" + absolutePath);
+		registry.addResourceHandler(logicalPath).addResourceLocations("file:/" + absolutePath + "/");
 	}
 }

@@ -34,46 +34,49 @@ sudo firewall-cmd --zone=public --add-port=3306/tcp --permanent
 sudo firewall-cmd --reload
 sudo systemctl restart mariadb
 
-TOMURL="http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.37/bin/apache-tomcat-8.5.37.tar.gz"
-sudo -i
-yum install java-1.8.0-openjdk -y
-yum install git wget -y
-cd /tmp/
-wget $TOMURL -O tomcatbin.tar.gz
-EXTOUT=`tar xzvf tomcatbin.tar.gz`
-TOMDIR=`echo $EXTOUT | cut -d '/' -f1`
-useradd --shell /sbin/nologin tomcat
-rsync -avzh /tmp/$TOMDIR/ /usr/local/tomcat8/
-chown -R tomcat.tomcat /usr/local/tomcat8
+# TOMCAT 
+cd /tmp
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.56/bin/apache-tomcat-9.0.56.tar.gz
+
+tar -xf apache-tomcat-9.0.56.tar.gz
+sudo mv apache-tomcat-9.0.56 /opt/tomcat/
+sudo ln -s /opt/tomcat/apache-tomcat-9.0.56 /opt/tomcat/latest
+sudo chown -R tomcat: /opt/tomcat
+sudo sh -c 'chmod +x /opt/tomcat/latest/bin/*.sh'
 
 rm -rf /etc/systemd/system/tomcat.service
-
 cat <<EOT>> /etc/systemd/system/tomcat.service
 [Unit]
-Description=Tomcat
+Description=Tomcat 9 servlet container
 After=network.target
 
 [Service]
+Type=forking
 User=tomcat
 Group=tomcat
-WorkingDirectory=/usr/local/tomcat8
 
-Environment=JRE_HOME=/usr/lib/jvm/jre
-Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=CATALINA_PID=/var/tomcat/%i/run/tomcat.pid
-Environment=CATALINA_HOME=/usr/local/tomcat8
-Environment=CATALINE_BASE=/usr/local/tomcat8
+Environment="JAVA_HOME=/usr/lib/jvm/jre"
+Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
 
-ExecStart=/usr/local/tomcat8/bin/catalina.sh run
-ExecStop=/usr/local/tomcat8/bin/shutdown.sh
+Environment="CATALINA_BASE=/opt/tomcat/latest"
+Environment="CATALINA_HOME=/opt/tomcat/latest"
+Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
+Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
-RestartSec=10
-Restart=always
+ExecStart=/opt/tomcat/latest/bin/startup.sh
+ExecStop=/opt/tomcat/latest/bin/shutdown.sh
 
 [Install]
 WantedBy=multi-user.target
 EOT
 
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl enable tomcat
+sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
+sudo firewall-cmd –reload
+
+# MAVEN
 wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
 sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
@@ -94,9 +97,9 @@ cd /tmp/AirTNT2/AirTNT/
 mvn install
 systemctl stop tomcat
 sleep 30
-rm -rf /opt/tomcat/apache-tomcat-9.0.56/webapps/ROOT*
-cp /tmp/AirTNT2/AirTNT/target/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/apache-tomcat-9.0.56/webapps/ROOT.war
+rm -rf /opt/tomcat/latest/webapps/ROOT*
+cp /tmp/AirTNT2/AirTNT/target/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/latest/webapps/ROOT.war
 systemctl start tomcat
 sleep 30
-cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/apache-tomcat-9.0.56/webapps/ROOT/WEB-INF/classes/application.properties
+cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/latest/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat
