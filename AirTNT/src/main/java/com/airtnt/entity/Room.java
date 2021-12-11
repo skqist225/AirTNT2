@@ -156,9 +156,9 @@ public class Room extends BaseEntity {
 	@Transient
 	public String renderThumbnailImage() {
 		if (this.thumbnail != null)
-			return "/airtnt/room_images/" + this.host.getEmail() + "/" + this.getId() + "/" + this.thumbnail;
+			return "/AirTNT/room_images/" + this.host.getEmail() + "/" + this.getId() + "/" + this.thumbnail;
 		else
-			return "/airtnt/images/airtntlogo.png";
+			return "/AirTNT/images/airtntlogo.png";
 	}
 
 	@Transient

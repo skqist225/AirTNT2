@@ -93,7 +93,7 @@ sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
 export JAVA_HOME=/usr/lib/jvm/jre-openjdk
 export M2_HOME=/opt/maven
 export MAVEN_HOME=/opt/maven
-export PATH=${M2_HOME}/bin:${PATH}
+export PATH=${M2_HOME}/bin:${PATH} 
 
 cd /tmp/AirTNT2/AirTNT/
 mvn install
