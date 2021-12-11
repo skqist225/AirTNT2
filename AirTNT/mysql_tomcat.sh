@@ -4,6 +4,8 @@ sudo yum update -y
 sudo yum install epel-release -y
 sudo yum install git zip unzip -y
 sudo yum install mariadb-server -y
+sudo yum install java-1.8.0-openjdk -y
+sudo yum install wget -y
 
 # starting & enabling mariadb-server
 sudo systemctl start mariadb
@@ -34,17 +36,20 @@ sudo firewall-cmd --zone=public --add-port=3306/tcp --permanent
 sudo firewall-cmd --reload
 sudo systemctl restart mariadb
 
+
+useradd --shell /sbin/nologin tomcat
 # TOMCAT 
-cd /tmp
+cd /tmp/
 wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.56/bin/apache-tomcat-9.0.56.tar.gz
 
 tar -xf apache-tomcat-9.0.56.tar.gz
 sudo mv apache-tomcat-9.0.56 /opt/tomcat/
+sudo sh -c 'chmod +x /opt/tomcat/apache-tomcat-9.0.56/bin/*.sh'
 sudo ln -s /opt/tomcat/apache-tomcat-9.0.56 /opt/tomcat/latest
 sudo chown -R tomcat: /opt/tomcat
-sudo sh -c 'chmod +x /opt/tomcat/latest/bin/*.sh'
 
-rm -rf /etc/systemd/system/tomcat.service
+sudo rm -rf /etc/systemd/system/tomcat.service
+sudo -i
 cat <<EOT>> /etc/systemd/system/tomcat.service
 [Unit]
 Description=Tomcat 9 servlet container
@@ -57,7 +62,6 @@ Group=tomcat
 
 Environment="JAVA_HOME=/usr/lib/jvm/jre"
 Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
-
 Environment="CATALINA_BASE=/opt/tomcat/latest"
 Environment="CATALINA_HOME=/opt/tomcat/latest"
 Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
@@ -74,13 +78,15 @@ sudo systemctl daemon-reload
 sudo systemctl start tomcat
 sudo systemctl enable tomcat
 sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
-sudo firewall-cmd –reload
+sudo firewall-cmd --reload
 
 # MAVEN
 wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
+sudo chmod +x /opt/apache-maven-3.6.3
 sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
-sudo yum install nano telnet
+sudo rm -rf /etc/profile.d/maven.sh
+sudo -i
 cat <<EOT>> /etc/profile.d/maven.sh
     export M2_HOME=/opt/maven
     export MAVEN_HOME=/opt/maven
@@ -88,17 +94,16 @@ cat <<EOT>> /etc/profile.d/maven.sh
 EOT
 sudo chmod +x /etc/profile.d/maven.sh
 source /etc/profile.d/maven.sh
-
-systemctl daemon-reload
-systemctl start tomcat
-systemctl enable tomcat
+export PATH=$PATH:/opt/maven/bin
+sleep 30
 
 cd /tmp/AirTNT2/AirTNT/
 mvn install
 systemctl stop tomcat
+sleep 30
 rm -rf /opt/tomcat/latest/webapps/ROOT*
 cp /tmp/AirTNT2/AirTNT/target/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/latest/webapps/ROOT.war
 systemctl start tomcat
-sleep 10
+sleep 30
 cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/latest/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat
