@@ -1,7 +1,7 @@
 # adding repository and installing nginx
 apt update
 apt install nginx -y
-cat <<EOT > airtntapp
+cat <<EOT>> airtntapp
 upstream airtntapp {
  server airtntApp:8080;
 }

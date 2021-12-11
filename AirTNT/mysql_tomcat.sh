@@ -35,8 +35,9 @@ sudo firewall-cmd --reload
 sudo systemctl restart mariadb
 
 TOMURL="http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.37/bin/apache-tomcat-8.5.37.tar.gz"
+sudo -i
 yum install java-1.8.0-openjdk -y
-yum install git maven wget -y
+yum install git wget -y
 cd /tmp/
 wget $TOMURL -O tomcatbin.tar.gz
 EXTOUT=`tar xzvf tomcatbin.tar.gz`
@@ -57,7 +58,7 @@ User=tomcat
 Group=tomcat
 WorkingDirectory=/usr/local/tomcat8
 
-#Environment=JRE_HOME=/usr/lib/jvm/jre
+Environment=JRE_HOME=/usr/lib/jvm/jre
 Environment=JAVA_HOME=/usr/lib/jvm/jre
 Environment=CATALINA_PID=/var/tomcat/%i/run/tomcat.pid
 Environment=CATALINA_HOME=/usr/local/tomcat8
@@ -76,7 +77,7 @@ EOT
 wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P /tmp
 sudo tar xf /tmp/apache-maven-3.6.3-bin.tar.gz -C /opt
 sudo ln -s /opt/apache-maven-3.6.3 /opt/maven
-sudo yum install nano
+sudo yum install nano telnet
 cat <<EOT>> /etc/profile.d/maven.sh
     export M2_HOME=/opt/maven
     export MAVEN_HOME=/opt/maven
@@ -92,10 +93,10 @@ systemctl enable tomcat
 cd /tmp/AirTNT2/AirTNT/
 mvn install
 systemctl stop tomcat
-sleep 60
-rm -rf /usr/local/tomcat8/webapps/ROOT*
-cp /target/AirTNT-0.0.1-SNAPSHOT.war /usr/local/tomcat8/webapps/ROOT.war
+sleep 30
+rm -rf /opt/tomcat/apache-tomcat-9.0.56/webapps/ROOT*
+cp /tmp/AirTNT2/AirTNT/target/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/apache-tomcat-9.0.56/webapps/ROOT.war
 systemctl start tomcat
-sleep 120
-cp /src/main/resources/application.properties /usr/local/tomcat8/webapps/ROOT/WEB-INF/classes/application.properties
+sleep 30
+cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/apache-tomcat-9.0.56/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat

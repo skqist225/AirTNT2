@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @SpringBootApplication
 @ComponentScan({ "com.airtnt.airtntapp" })
 @EntityScan({ "com.airtnt.entity" })
-@CrossOrigin(origins = { "http://localhost:8001" })
-public class AirTntApplication {
+public class AirTntApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AirTntApplication.class, args);
