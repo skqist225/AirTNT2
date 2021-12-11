@@ -4,7 +4,7 @@ sudo yum update -y
 sudo yum install epel-release -y
 sudo yum install git zip unzip -y
 sudo yum install mariadb-server -y
-yum install java-1.8.0-openjdk -y
+sudo yum install java-1.8.0-openjdk -y
 sudo yum install wget -y
 
 # starting & enabling mariadb-server
@@ -48,7 +48,7 @@ sudo sh -c 'chmod +x /opt/tomcat/apache-tomcat-9.0.56/bin/*.sh'
 sudo ln -s /opt/tomcat/apache-tomcat-9.0.56 /opt/tomcat/latest
 sudo chown -R tomcat: /opt/tomcat
 
-sudo rm -rf /etc/systemd/system/tomcat.service
+rm -rf /etc/systemd/system/tomcat.service
 sudo -i
 cat <<EOT>> /etc/systemd/system/tomcat.service
 [Unit]
@@ -61,12 +61,12 @@ Type=forking
 User=tomcat
 Group=tomcat
 
-Environment="JAVA_HOME=/usr/lib/jvm/jre-openjdk"
-Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom"
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment=JAVA_OPTS=-Djava.security.egd=file:///dev/urandom
 
-Environment="CATALINA_BASE=/opt/tomcat/latest"
-Environment="CATALINA_HOME=/opt/tomcat/latest"
-Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
+Environment=CATALINA_BASE=/opt/tomcat/latest
+Environment=CATALINA_HOME=/opt/tomcat/latest
+Environment=CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid
 Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
 ExecStart=/opt/tomcat/latest/bin/startup.sh
