@@ -56,9 +56,8 @@
                     <a
                         th:href="@{/become-a-host/}"
                         class="header__become-host"
-                        style="text-decoration: none"
                     >
-                        <div>Trở thành chủ nhà</div>
+                     Trở thành chủ nhà
                     </a>
                 </div>
 
@@ -148,11 +147,10 @@
             }
         });
 
-        async function getLoggedInUserAvatar() {
+        (async function() {
             const { data } = await axios.get(`${baseURL}user/avatar`);
             const userAvatar = $('#userAvatar');
             if (data) userAvatar.attr('src', `${baseURL.substring(0, baseURL.length - 1)}${data}`);
-        }
-        getLoggedInUserAvatar();
+        })();
     </script>
 </div>

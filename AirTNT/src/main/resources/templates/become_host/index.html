@@ -77,15 +77,20 @@
             type="text/javascript"
             th:src="@{/webjars/jquery/jquery.min.js}"
         ></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+                const baseURL = /*[[@{/}]]*/ '';
+            /*]]>*/
+        </script>
 
         <script>
             function backtoHomePage() {
-                window.location.href = 'http://localhost:8001/airtnt/';
+                window.location.href = baseURL;
             }
 
             function start() {
                 window.location.href =
-                    'http://localhost:8001/airtnt/become-a-host/property-type-group';
+                    `${baseURL}become-a-host/property-type-group`;
             }
         </script>
     </body>

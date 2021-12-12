@@ -12,7 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PhotoDTO {
-    private String folderno;
+    private String host;
+    private String roomId;
     private MultipartFile[] photos;
 
 }

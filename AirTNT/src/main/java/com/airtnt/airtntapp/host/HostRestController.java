@@ -2,14 +2,10 @@ package com.airtnt.airtntapp.host;
 
 import java.io.IOException;
 
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.airtnt.airtntapp.FileUploadUtil;
 import com.airtnt.airtntapp.room.RoomService;
@@ -25,61 +21,57 @@ import org.json.JSONObject;
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @RestController
 @RequestMapping("/become-a-host/")
 public class HostRestController {
 
+    private final String STATIC_PATH = "src/main/resources/static/room_images/";
+
     @Autowired
     private RoomService roomService;
 
     @PostMapping("upload-room-photos")
-    public String uploadRoomPhotos(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute PhotoDTO payload)
-            throws IOException, URISyntaxException {
+    public String uploadRoomPhotos(@ModelAttribute PhotoDTO payload)
+            throws IOException {
         String uploadDir = "";
 
-        if (payload.getFolderno() != null) {
-            uploadDir = "../room_images/" + userDetails.getUsername() + "/" + payload.getFolderno();
+        if (payload.getRoomId() != null) {
+            uploadDir = STATIC_PATH + payload.getHost() + "/" + payload.getRoomId();
             FileUploadUtil.cleanDir(uploadDir);
         } else
-            uploadDir = "../room_images/" + userDetails.getUsername();
+            uploadDir = STATIC_PATH + payload.getHost();
 
         for (MultipartFile multipartFile : payload.getPhotos()) {
             if (!multipartFile.isEmpty()) {
-                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
             }
         }
 
         JSONObject object = new JSONObject();
         object.put("status", "success");
-        object.put("userName", userDetails.getUsername());
+        object.put("username", payload.getHost());
 
         return object.toString();
     }
 
     @PostMapping("update/upload-room-photos")
-    public String updatedUploadRoomPhotos(@AuthenticationPrincipal UserDetails userDetails,
-            @ModelAttribute PhotoDTO payload) throws IOException, URISyntaxException {
-        String userName = userDetails.getUsername();
-        String uploadDir = "../room_images/" + userName + "/" + payload.getFolderno();
+    public String updatedUploadRoomPhotos(
+            @ModelAttribute PhotoDTO payload) throws IOException {
+        String uploadDir = STATIC_PATH + payload.getHost() + "/" + payload.getRoomId();
         FileUploadUtil.cleanDir(uploadDir);
 
         Set<Image> newImages = new HashSet<>();
-
         for (MultipartFile multipartFile : payload.getPhotos()) {
             if (!multipartFile.isEmpty()) {
-
-                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-                System.out.println(fileName);
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
                 newImages.add(new Image(fileName));
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
             }
         }
         // do not assign new set // get new set and push it to old set
-        Room room = roomService.getRoomById(Integer.parseInt(payload.getFolderno()));
+        Room room = roomService.getRoomById(Integer.parseInt(payload.getRoomId()));
         room.getImages().clear();
         for (Image i : newImages) {
             room.getImages().add(i);
@@ -102,28 +94,26 @@ public class HostRestController {
         String uploadDir = "";
 
         if (payload.getFolderno() != null) {
-            uploadDir = "../room_images/" + userName + "/" + payload.getFolderno();
+            uploadDir = STATIC_PATH + userName + "/" + payload.getFolderno();
         } else
-            uploadDir = "../room_images/" + userName;
+            uploadDir = STATIC_PATH + userName;
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
 
         String contentType = "text/plain";
         Path path = Paths.get(uploadDir);
-        for (String name : roomImages) {
-
-            Path fullPath = path.resolve(name);
-            String originalFileName = name;
-            String fileName = name;
+        for (String image : roomImages) {
+            Path fullPath = path.resolve(image);
+            String originalFileName = image;
+            String fileName = image;
 
             byte[] content = null;
             try {
                 content = Files.readAllBytes(fullPath);
+                MultipartFile result = new MockMultipartFile(fileName, originalFileName, contentType, content);
+                multipartFiles.add(result);
             } catch (final IOException e) {
             }
-            MultipartFile result = new MockMultipartFile(fileName, originalFileName, contentType, content);
-            multipartFiles.add(result);
-
         }
         JSONObject object = new JSONObject();
         object.put("status", "success");

@@ -12,7 +12,7 @@ jQuery(document).ready(function () {
         $('#room-preview__room-type').text(
             `${privacyType.substring(0, privacyType.lastIndexOf(' '))} ${
                 room.roomGroupText
-            } cho thuê. Chủ nhà ${userName}`
+            } cho thuê. Chủ nhà ${room.username}`
         );
         $('#room-preview__room-info').text(
             `${room.guestNumber} khách · ${room.bedRoomNumber} phòng ngủ  · ${room.bedNumber} giường · ${room.bathRoomNumber} phòng tắm`
@@ -89,7 +89,7 @@ async function nextPage() {
             longitude: room.longitude * 1,
             price: room.roomPricePerNight,
             priceType: 'PER_NIGHT',
-            host: hostName,
+            host: room.username,
             privacyType: room.privacyType,
         };
 

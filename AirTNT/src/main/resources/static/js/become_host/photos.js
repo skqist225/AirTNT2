@@ -13,16 +13,16 @@ $(document).ready(function () {
         readURL(this.files, uploadPhotos);
     });
 
-    test(uploadPhotos);
+    restoreRoomImages(uploadPhotos);
 });
 
-async function test(uploadPhotos) {
+async function restoreRoomImages(uploadPhotos) {
     if (localStorage.getItem('room')) {
-        const { roomImages, userName2 } = JSON.parse(localStorage.getItem('room'));
+        const { roomImages, username } = JSON.parse(localStorage.getItem('room'));
         if (roomImages && roomImages.length >= 5) {
             isUploaded = true;
             const formData = new FormData();
-            formData.set('userName', userName2);
+            formData.set('username', username);
             roomImages.forEach(image => formData.append('roomImages', image));
 
             const { data } = await axios.post(
@@ -360,10 +360,11 @@ async function uploadImagesToFolder() {
     }
 
     const formData = new FormData();
+    formData.set('host', userName);
     photos.forEach(photo => formData.append('photos', photo));
 
     const {
-        data: { status, userName: userName2 },
+        data: { status, username },
     } = await axios.post(`${baseURL}become-a-host/upload-room-photos`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -378,14 +379,14 @@ async function uploadImagesToFolder() {
         if (!localStorage.getItem('room')) {
             room = {
                 roomImages: photos.map(({ name }) => name),
-                userName2,
+                username,
             };
         } else {
             room = JSON.parse(localStorage.getItem('room'));
             room = {
                 ...room,
                 roomImages: photos.map(({ name }) => name),
-                userName2,
+                username,
             };
         }
         localStorage.setItem('room', JSON.stringify(room));

@@ -1,9 +1,6 @@
 package com.airtnt.airtntapp.room;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.airtnt.airtntapp.calendar.CalendarClass;
@@ -39,10 +36,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -100,7 +93,7 @@ public class RoomRestController {
     public String saveRoom(@AuthenticationPrincipal UserDetails userDetails,
             @ModelAttribute RoomPostDTO payload) throws IOException, UserNotFoundException {
         Set<Rule> rules = new HashSet<>();
-        Set<Amentity> amentities = new HashSet<>();
+        Set<Amentity> amenities = new HashSet<>();
         Set<Image> images = new HashSet<>();
 
         Iterator<Rule> itr = ruleService.listAllRule();
@@ -109,28 +102,23 @@ public class RoomRestController {
         }
 
         for (int i = 0; i < payload.getAmentities().length; i++) {
-            amentities.add(new Amentity(payload.getAmentities()[i]));
+            amenities.add(new Amentity(payload.getAmentities()[i]));
         }
 
         for (int i = 0; i < payload.getImages().length; i++) {
             images.add(new Image(payload.getImages()[i]));
         }
-        PriceType pt = payload.getPriceType() == "PER_NIGHT" ? PriceType.PER_NIGHT : PriceType.PER_WEEK;
+        PriceType pt = Objects.equals(payload.getPriceType(), "PER_NIGHT") ? PriceType.PER_NIGHT : PriceType.PER_WEEK;
         Country country = new Country(payload.getCountry());
 
         // check if state exist
         State state = stateService.getStateByName(payload.getState());
-        if (state != null) { // exist
-
-        } else {
+        if (state == null)
             state = new State(payload.getState(), country);
-        }
 
         // check if city exist
         City city = cityService.getCityByName(payload.getCity());
-        if (city != null) {
-
-        } else
+        if (city == null)
             city = new City(payload.getCity(), state);
 
         User user = userService.get(payload.getHost());
@@ -141,7 +129,7 @@ public class RoomRestController {
 
         Room room = Room.builder().name(payload.getName()).accomodatesCount(payload.getAccomodatesCount())
                 .bathroomCount(payload.getBathroomCount()).bedCount(payload.getBedCount())
-                .bedroomCount(payload.getBedroomCount()).description(payload.getDescription()).amentities(amentities)
+                .bedroomCount(payload.getBedroomCount()).description(payload.getDescription()).amentities(amenities)
                 .images(images).latitude(payload.getLatitude()).longitude(payload.getLongitude())
                 .price(payload.getPrice()).priceType(pt).city(city)
                 .state(state).country(country).rules(rules).host(new User(payload.getHost()))
@@ -154,8 +142,9 @@ public class RoomRestController {
 
         /* MOVE IMAGE TO FOLDER */
         if (savedRoom != null) {
-            String uploadDir = "../room_images/" + user.getEmail() + "/" + savedRoom.getId();
-            String source = "../room_images/" + user.getEmail() + "/";
+            String STATIC_PATH = "src/main/resources/static/room_images/";
+            String uploadDir = STATIC_PATH + user.getEmail() + "/" + savedRoom.getId();
+            String source = STATIC_PATH + user.getEmail() + "/";
             Path sourcePath = Paths.get(source);
             Path targetPath = Files.createDirectories(Paths.get(uploadDir));
             for (String imageName : payload.getImages()) {
@@ -164,6 +153,7 @@ public class RoomRestController {
             }
         }
 
+        assert savedRoom != null;
         return savedRoom.getId() + "";
     }
 }

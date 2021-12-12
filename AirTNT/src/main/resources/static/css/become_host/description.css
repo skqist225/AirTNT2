@@ -63,9 +63,9 @@
 }
 
 .description__title-container.choosen {
-    border-color: inherit !important;
-    border-style: solid !important;
-    border-width: 2px !important;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 2px;
 }
 
 .description__title-container span:first-child {

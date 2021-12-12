@@ -24,7 +24,7 @@ $(document).ready(function () {
 });
 
 function backtoHomePage() {
-    window.location.href = '/airtnt/';
+    window.location.href = baseURL;
 }
 
 function nextPage() {
@@ -48,5 +48,5 @@ function nextPage() {
     }
     localStorage.setItem('room', JSON.stringify(room));
 
-    window.location.href = '/airtnt/become-a-host/location';
+    window.location.href = `${baseURL}become-a-host/location`;
 }
