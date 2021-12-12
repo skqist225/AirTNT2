@@ -155,7 +155,7 @@
                         <div style="display: flex; align-items: center">
                             <div style="width: 56px; height: 40px">
                                 <img
-                                    th:src="${booking.room.renderThumbnailImage()}"
+                                    th:src="@{${booking.room.renderThumbnailImage}}"
                                     alt="Room's thumbnail"
                                     class="listings__room-thumbnail"
                                 />

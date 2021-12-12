@@ -54,7 +54,7 @@
                                 >
                                     <div>
                                         <img
-                                            th:src="${cat.iconPath}"
+                                            th:src="@{${cat.iconPath}}"
                                             th:alt="${cat.iconPath}"
                                             width="20px"
                                             height="20px"
@@ -110,11 +110,11 @@
                         <th:block th:each="room, itr : ${rooms}">
                             <div class="room__container">
                                 <div class="room__image__container">
-                                    <a th:href="${'/room/' + room.id}">
+                                    <a th:href="@{${'/room/' + room.id}}">
                                         <div class="image__slider">
                                             <th:block th:each="image, itr2 : ${room.images}">
                                                 <img
-                                                    th:src="${image.getImagePath(room.host.email, room.id)}"
+                                                    th:src="@{${image.getImagePath(room.host.email, room.id)}}"
                                                     th:data-index="${itr2.index + 1}"
                                                     th:class="${'room__image' + (itr.index + 1) + ' ' + 'img_idt'}"
                                                     style="object-fit: cover"
@@ -207,7 +207,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <a th:href="${'/room/' + room.id}">
+                                <a th:href="@{${'/room/' + room.id}}">
                                     <div class="flex" style="padding-top: 15px">
                                         <div class="room__name">[[${room.name}]]</div>
                                         <div class="room__price">
@@ -414,7 +414,7 @@
 
         <script th:inline="javascript">
             /*<![CDATA[*/
-            const baseURL = /*[[@{/}]]*/ '/airtnt/';
+            const baseURL = /*[[@{/}]]*/ '';
             let wishlists = /*[[${wishlists}]]*/ [];
             if (wishlists === null) wishlists = [];
             const user = /*[[${user}]]*/ 'user';

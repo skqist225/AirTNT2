@@ -47,14 +47,14 @@
 
                 <section class="rdt_images grid">
                     <div style="height: 480px">
-                        <img th:src="${thumbnail}" width="100%" height="100%" class="image" />
+                        <img th:src="@{${thumbnail}}" width="100%" height="100%" class="image" />
                     </div>
                     <div style="position: relative">
                         <div class="rdt_images__left" style="height: 470px">
                             <th:block th:each="image,iter : ${roomImages}">
                                 <div style="width: 100%; height: calc(470px / 2)">
                                     <img
-                                        th:src="${image.getImagePath(room.host.email, room.id)}"
+                                        th:src="@{${image.getImagePath(room.host.email, room.id)}}"
                                         class="image"
                                         style="width: 100%; height: 100%"
                                         th:class="${iter.even}? 'roundedBorder'"
@@ -609,13 +609,12 @@
         <script type="text/javascript" th:src="@{/js/helpers/format_number.js}"></script>
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <div th:replace="header :: javascript"></div>
 
         <script th:inline="javascript">
             /*<![CDATA[*/
             const roomPrice = /*[[${room.price}]]*/ 0;
             const symbol = /*[[${room.currency.symbol}]]*/ 'đ';
-            const baseURL = /*[[@{/}]]*/ '/airtnt/';
+            const baseURL = /*[[@{/}]]*/ '';
             const roomId = /*[[${room.id}]]*/ 0;
             const bookedDates = /*[[${bookedDates}]]*/ [];
             const roomLongitude = /*[[${room.longitude}]]*/ '';
@@ -628,11 +627,11 @@
                     /*[[${wishlists}]]*/
                 ] || [];
             const user = /*[[${user}]]*/ 'user';
-            console.log(user);
             /*]]>*/
         </script>
         <script type="text/javascript" th:src="@{/js/helpers/get_location.js}"></script>
         <script type="text/javascript" th:src="@{/js/room/room_details.js}"></script>
         <script type="text/javascript" th:src="@{/js/helpers/add_add_remove_fav_room.js}"></script>
+        <div th:replace="header :: javascript"></div>
     </body>
 </html>

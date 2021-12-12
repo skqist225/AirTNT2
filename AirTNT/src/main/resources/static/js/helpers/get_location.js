@@ -36,7 +36,7 @@ function getRoomlocation() {
         };
 
         const image = document.createElement('img');
-        image.src = `/user_images/${userid}/${userimage}`;
+        image.src = `${baseURL}user_images/${userid}/${userimage}`;
         image.style = 'width:40px; height:40px; border-radius:50%;object-fit:cover';
 
         const marker = new mapboxgl.Marker(image)

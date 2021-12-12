@@ -260,12 +260,12 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/helpers/format_number.js}"></script>
-        <div th:replace="header :: javascript"></div>
         <script th:inline="javascript">
             /*<![CDATA[*/
-            const baseURL = /*[[@{/}]]*/ 'default';
+            const baseURL = /*[[@{/}]]*/ '';
             /*]]>*/
         </script>
+        <div th:replace="header :: javascript"></div>
         <script>
             let pageNumber = 1;
             const currentUrl = window.location.href;

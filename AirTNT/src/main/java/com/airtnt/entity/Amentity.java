@@ -48,11 +48,11 @@ public class Amentity extends BaseEntity {
 
 	@Transient
 	public String getIconImagePath() {
-		return "amentity_images/" + this.iconImage;
+		return "/amentity_images/" + this.iconImage;
 	}
 
 	@Transient
 	public String getIconImagePath1() {
-		return "/airtnt/amentity_images/" + this.iconImage; 
+		return "/amentity_images/" + this.iconImage; 
 	}
 }

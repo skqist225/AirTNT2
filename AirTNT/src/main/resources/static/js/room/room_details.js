@@ -404,7 +404,7 @@ async function fetchTheNextCoupleOfMonth(firstMonthAndYear, secondMonthAndYear, 
 const fetchDaysInMonth = async (month, year) => {
     const {
         data: { daysInMonth, startInWeek },
-    } = await axios.get(`/airtnt/calendar/${month + 1}/${year}`);
+    } = await axios.get(`${baseURL}calendar/${month + 1}/${year}`);
     return Promise.resolve({ daysInMonth, startInWeek });
 };
 

@@ -34,7 +34,7 @@ public class UserRestController {
     @GetMapping("avatar")
     public String getUserAvatar(@AuthenticationPrincipal AirtntUserDetails userDetails) {
         if (userDetails == null)
-            return "/images/default_user_avatar.png";
+            return "images/default_user_avatar.png";
 
         User user = userService.getByEmail(userDetails.getUsername());
         return user.getAvatarPath();

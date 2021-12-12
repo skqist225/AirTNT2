@@ -1,10 +1,3 @@
-main {
-    background-image: url('http://localhost:8001/airtnt/images/register_background.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-}
-
 .main {
     max-width: 1200px;
     width: 90%;

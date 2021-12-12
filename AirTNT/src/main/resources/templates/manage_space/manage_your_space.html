@@ -157,7 +157,7 @@
                                 <th:block th:each="image : ${room.images}">
                                     <div style="margin-right: 10px">
                                         <img
-                                            th:src="${image.getImagePath(userName, room.id)}"
+                                            th:src="@{${image.getImagePath(userName, room.id)}}"
                                             alt=""
                                             width="210px"
                                             height="140px"
@@ -749,7 +749,7 @@
         <script type="text/javascript" th:src="@{/js/jquery.keyframes.js}"></script>
         <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
-        <div th:replace="header :: javascript"></div>
+
         <script th:inline="javascript">
             /*<![CDATA[*/
             const baseURL = /*[[@{/}]]*/ 'default';
@@ -780,6 +780,7 @@
             AOS.init();
             /*]]>*/
         </script>
+        <div th:replace="header :: javascript"></div>
         <script th:src="@{/js/manage_your_space/manage_your_space.js}"></script>
     </body>
 </html>
