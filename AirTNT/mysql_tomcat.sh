@@ -99,10 +99,10 @@ cd /tmp/AirTNT2/AirTNT/
 mvn install
 sudo -i
 systemctl stop tomcat
-sleep 30
+sleep 10
 rm -rf /opt/tomcat/latest/webapps/ROOT*
 cp /tmp/AirTNT2/AirTNT/target/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/latest/webapps/ROOT.war
 systemctl start tomcat
-sleep 30
+sleep 10
 cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/latest/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat

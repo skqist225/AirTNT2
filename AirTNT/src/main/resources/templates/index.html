@@ -110,7 +110,7 @@
                         <th:block th:each="room, itr : ${rooms}">
                             <div class="room__container">
                                 <div class="room__image__container">
-                                    <a th:href="${'/airtnt/room/' + room.id}">
+                                    <a th:href="${'/room/' + room.id}">
                                         <div class="image__slider">
                                             <th:block th:each="image, itr2 : ${room.images}">
                                                 <img
@@ -207,7 +207,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <a th:href="${'/airtnt/room/' + room.id}">
+                                <a th:href="${'/room/' + room.id}">
                                     <div class="flex" style="padding-top: 15px">
                                         <div class="room__name">[[${room.name}]]</div>
                                         <div class="room__price">
