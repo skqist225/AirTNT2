@@ -154,8 +154,8 @@
             const { data } = await axios.get(`${prefixUrl}/user/avatar`);
             const userAvatar = $('#userAvatar');
 
-            if (data) userAvatar.attr('src', `${prefixUrl}${data}`);
-            else userAvatar.attr('src', `${prefixUrl}/images/default_user_image.png`);
+            if (data) userAvatar.attr('src', `${data}`);
+            else userAvatar.attr('src', `/images/default_user_image.png`);
         }
         getLoggedInUserAvatar();
     </script>

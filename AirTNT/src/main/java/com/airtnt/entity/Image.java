@@ -41,6 +41,6 @@ public class Image {
 
 	@Transient
 	public String getImagePath(String userName, Integer roomId) {
-		return "/AirTNT/room_images/" + userName + "/" + roomId + "/" + this.image;
+		return "/room_images/" + userName + "/" + roomId + "/" + this.image;
 	}
 }

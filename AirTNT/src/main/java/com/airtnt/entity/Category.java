@@ -35,7 +35,7 @@ public class Category extends BaseEntity {
 
 	@Transient
 	public String getIconPath() {
-		return "/AirTNT/category_images/" + this.icon;
+		return "/category_images/" + this.icon;
 	}
   
 	public Category(String name) {
