@@ -169,10 +169,9 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script type="text/javascript" th:src="@{/js/helpers/format_number.js}"></script>
-        <div th:replace="header :: javascript"></div>
         <script th:inline="javascript">
             /*<![CDATA[*/
-            const baseURL = /*[[@{/}]]*/ 'default';
+            const baseURL = /*[[@{/}]]*/ '';
             const roomPrice = /*[[${room.price}]]*/ 0;
             const roomPriceType = /*[[${room.priceType}]]*/ 'đêm';
             const symbol = /*[[${room.currency.symbol}]]*/ 'đ';
@@ -208,7 +207,6 @@
                 checkStatus();
 
                 document.querySelector('#payment-form').addEventListener('submit', handleSubmit);
-
                 // Fetches a payment intent and captures the client secret
                 async function initialize() {
                     const response = await fetch(`${baseURL}api/create-payment-intent`, {
@@ -236,12 +234,12 @@
                     );
 
                     if (data !== null) {
-                        await axios.put('/airtnt/bookings', [data]);
+                        await axios.put(`${baseURL}bookings`, [data]);
 
                         const { error } = await stripe.confirmPayment({
                             elements,
                             confirmParams: {
-                                return_url: `http://localhost:8001/airtnt/booking/success-booking`,
+                                return_url: `${baseURL}booking/success-booking`,
                             },
                         });
 
@@ -319,5 +317,6 @@
                 window.location.href = `${baseURL}room/${roomId}`;
             }
         </script>
+        <div th:replace="header :: javascript"></div>
     </body>
 </html>

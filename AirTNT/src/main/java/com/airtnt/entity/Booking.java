@@ -31,7 +31,7 @@ public class Booking extends BaseEntity {
 	@Column(columnDefinition = "Decimal(20,2)", nullable = false)
 	private float pricePerDay;
 
-	@Column(columnDefinition = "SMALLINT default 0") 
+	@Column(columnDefinition = "SMALLINT default 0")
 	private int numberOfDays;
 
 	@Builder.Default

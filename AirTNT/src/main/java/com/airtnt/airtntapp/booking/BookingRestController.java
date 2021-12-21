@@ -37,11 +37,12 @@ public class BookingRestController {
             @Param("siteFee") Float siteFee) throws ParseException {
         Room room = roomService.getRoomById(roomId);
         User customer = userService.getByEmail(userDetails.getUsername());
-        Booking booking = bookingService.createBooking(checkin, checkout, room, numberOfDays, siteFee, customer);
-
-        BookingDTO bDTO = new BookingDTO(booking.getId(), booking.getBookingDate(),
-                booking.getRoom().getCurrency().getSymbol(), booking.getTotalFee(), 0);
-
+        Booking booking = bookingService.createBooking(checkin, checkout, room,
+                numberOfDays, siteFee, customer);
+        BookingDTO bDTO = new BookingDTO();
+        if (booking != null)
+            bDTO = new BookingDTO(booking.getId(), booking.getBookingDate(),
+                    booking.getRoom().getCurrency().getSymbol(), booking.getTotalFee(), 0);
         return bDTO;
     }
 }

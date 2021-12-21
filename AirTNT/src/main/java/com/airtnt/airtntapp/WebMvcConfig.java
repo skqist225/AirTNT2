@@ -1,8 +1,5 @@
 package com.airtnt.airtntapp;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javax.servlet.MultipartConfigElement;
 
 import org.springframework.boot.web.servlet.MultipartConfigFactory;

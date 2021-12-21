@@ -42,16 +42,21 @@ public class BookingService {
         return bookingRepository.findById(bookingId).get();
     }
 
+    public boolean isBooked(Date checkinDate, Date checkoutDate) throws ParseException {
+        Booking isBooked = bookingRepository.findByCheckinDateAndCheckoutDate(checkinDate, checkoutDate);
+        if (isBooked != null)
+            return true;
+        return false;
+    }
+
     public Booking createBooking(String checkin, String checkout, Room room, int numberOfDays, float siteFee,
             User customer) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Date checkinDate = sdf.parse(checkin);
         Date checkoutDate = sdf.parse(checkout);
 
-        Booking isBooked = bookingRepository.findByCheckinDateAndCheckoutDate(checkinDate, checkoutDate);
-        if (isBooked != null) {
+        if (isBooked(checkinDate, checkoutDate))
             return null;
-        }
 
         Booking booking = Booking.builder().checkinDate(checkinDate).checkoutDate(checkoutDate)
                 .pricePerDay(room.getPrice()).numberOfDays(numberOfDays).siteFee(siteFee).room(room).customer(customer)
@@ -222,28 +227,27 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-
     public Page<Booking> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
-		Sort sort = Sort.by(sortField);
+        Sort sort = Sort.by(sortField);
 
-		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 
-		Pageable pageable = PageRequest.of(pageNum - 1, BOOKINGS_PER_PAGE, sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, BOOKINGS_PER_PAGE, sort);
 
-		if (keyword != null) {
-			return bookingRepository.findAllAdmin(keyword, pageable);
-		}
+        if (keyword != null) {
+            return bookingRepository.findAllAdmin(keyword, pageable);
+        }
 
-		return bookingRepository.findAll(pageable);
-	}
+        return bookingRepository.findAll(pageable);
+    }
 
     public Booking getById(int id) throws BookingNotFoundException {
-		try {
-			return bookingRepository.getById(id);
-		} catch (NoSuchElementException ex) {
-			throw new BookingNotFoundException("could not find booking with id: " + id); 
-		}
-	}
+        try {
+            return bookingRepository.getById(id);
+        } catch (NoSuchElementException ex) {
+            throw new BookingNotFoundException("could not find booking with id: " + id);
+        }
+    }
 
     public Integer getNumberOfBooking() {
         return bookingRepository.getNumberOfBooking();

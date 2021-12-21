@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import com.airtnt.airtntapp.FileUploadUtil;
 import com.airtnt.airtntapp.city.CityRepository;
-import com.airtnt.airtntapp.country.CountryRepository;
 import com.airtnt.airtntapp.state.StateRepository;
 import com.airtnt.airtntapp.user.UserRepository;
 import com.airtnt.entity.Amentity;
@@ -51,9 +50,6 @@ public class RoomService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private CountryRepository countryRepository;
 
 	@Autowired
 	private StateRepository stateRepository;

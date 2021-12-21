@@ -1,7 +1,9 @@
 package com.airtnt.airtntapp.booking;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +49,14 @@ public class BookingController {
     public String roomBookings(@PathVariable("roomId") Integer roomId, @AuthenticationPrincipal UserDetails userDetails,
             @Param("checkin") String checkin,
             @Param("checkout") String checkout, @Param("numberOfNights") Integer numberOfNights,
-            RedirectAttributes redirectAttributes, Model model) {
+            RedirectAttributes redirectAttributes, Model model) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date checkinDate = sdf.parse(checkin);
+        Date checkoutDate = sdf.parse(checkout);
+
+        if (bookingService.isBooked(checkinDate, checkoutDate))
+            return "redirect:/room/" + roomId;
+
         Room room = roomService.getRoomById(roomId);
         String[] checkinArr = checkin.split("-");
         String[] checkoutArr = checkout.split("-");
