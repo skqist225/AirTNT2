@@ -45,7 +45,7 @@ cd /tmp/
 wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.56/bin/apache-tomcat-9.0.56.tar.gz
 
 sudo mkdir /opt/tomcat/
-sudo tar -xf apache-tomcat-9.0.56.tar.gz -C /opt/tomcat/
+sudo tar -xf /tmp/apache-tomcat-9.0.56.tar.gz -C /opt/tomcat/
 sudo chmod +x /opt/tomcat/apache-tomcat-9.0.56/bin/*.sh
 sudo ln -s /opt/tomcat/apache-tomcat-9.0.56 /opt/tomcat/latest
 sudo chown -R tomcat: /opt/tomcat
@@ -96,14 +96,23 @@ export MAVEN_HOME=/opt/maven
 export PATH=${M2_HOME}/bin:${PATH} 
 export MAVEN_OPTS="-Xmx512m"
 
-cd /tmp/AirTNT2/AirTNT/
-mvn install
-sudo -i
+cd /tmp/AirTNT2/AirTNT/target/
+rm AirTNT-0.0.1-SNAPSHOT.war -y
 systemctl stop tomcat
 sleep 10
 rm -rf /opt/tomcat/latest/webapps/ROOT*
 cp /tmp/AirTNT2/AirTNT/target/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/latest/webapps/ROOT.war
+#aws s3 cp s3://airtnt/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/latest/webapps/ROOT.war
+#db enpoint: airtnt-mysql-db.c571muvkfnd1.us-east-2.rds.amazonaws.com
 systemctl start tomcat
 sleep 10
 cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/latest/webapps/ROOT/WEB-INF/classes/application.properties
 systemctl restart tomcat
+
+systemctl stop tomcat
+sleep 10
+rm -rf /opt/tomcat/latest/webapps/ROOT*
+aws s3 cp s3://airtnt/AirTNT-0.0.1-SNAPSHOT.war /opt/tomcat/latest/webapps/ROOT.war
+systemctl start tomcat
+sleep 10
+cp /tmp/AirTNT2/AirTNT/src/main/resources/application.properties /opt/tomcat/latest/webapps/ROOT/WEB-INF/classes/application.properties
