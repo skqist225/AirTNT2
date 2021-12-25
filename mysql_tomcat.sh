@@ -52,6 +52,7 @@ sudo chown -R tomcat: /opt/tomcat
 
 sudo rm -rf /etc/systemd/system/tomcat.service
 sudo -i
+
 sudo cat <<EOT>> /etc/systemd/system/tomcat.service
 [Unit]
 Description=Tomcat 9 servlet container
