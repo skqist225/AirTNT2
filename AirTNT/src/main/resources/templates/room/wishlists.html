@@ -89,17 +89,17 @@
         <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-        <div th:replace="header :: javascript"></div>
+
         <script th:inline="javascript">
             /*<![CDATA[*/
-            const baseURL = /*[[@{/}]]*/ 'default';
+            const baseURL = /*[[@{/}]]*/ '';
             /*]]>*/
         </script>
         <script>
             function redirectToRoomDetails(self) {
-                // console.log('true');
                 window.location.href = `${baseURL}room/${self.children('input').val()}`;
             }
         </script>
+        <div th:replace="header :: javascript"></div>
     </body>
 </html>

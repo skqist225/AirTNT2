@@ -53,11 +53,8 @@
                     th:if="${excludeBecomeHostAndNavigationHeader != true}"
                     sec:authorize="isAuthenticated()"
                 >
-                    <a
-                        th:href="@{/become-a-host/}"
-                        class="header__become-host"
-                    >
-                     Trở thành chủ nhà
+                    <a th:href="@{/become-a-host/}" class="header__become-host">
+                        Trở thành chủ nhà
                     </a>
                 </div>
 
@@ -93,6 +90,15 @@
                                     alt="User's avatar'"
                                     class="header__user-avatar"
                                     id="userAvatar"
+                                    sec:authorize="isAuthenticated()"
+                                    th:src="@{${#request.userPrincipal.principal.avatarPath}}"
+                                />
+                                <img
+                                    alt="User's avatar'"
+                                    class="header__user-avatar"
+                                    id="userAvatar"
+                                    sec:authorize="isAnonymous()"
+                                    th:src="@{${/images/default_user_avatar.png}}"
                                 />
                             </div>
                         </div>
@@ -146,11 +152,5 @@
                 isClicked = false;
             }
         });
-
-        (async function() {
-            const { data } = await axios.get(`${baseURL}user/avatar`);
-            const userAvatar = $('#userAvatar');
-            if (data) userAvatar.attr('src', `${baseURL.substring(0, baseURL.length - 1)}${data}`);
-        })();
     </script>
 </div>
