@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,7 +70,7 @@ public class RoomRestController {
     @Autowired
     private CityService cityService;
 
-    @GetMapping("/rooms/{categoryId}")
+    @RequestMapping("/api/rooms/category/{categoryId}")
     public String fetchRoomsByCategoryId(@PathVariable("categoryId") Integer categoryId,
             @RequestParam(value = "privacies", required = false, defaultValue = "") String privacies,
             @RequestParam(value = "minPrice", required = false, defaultValue = "0") String minPrice,
@@ -95,16 +96,19 @@ public class RoomRestController {
         List<Room> rooms = roomService.getRoomsByCategoryId(categoryId, true, 1, filters).getContent();
 
         for (Room room : rooms) {
-            JSONArray likedByUsers = new JSONArray();
-            List<Integer> likedUsers = roomService.getLikedUsers(room.getId());
-            for (Integer userId : likedUsers) {
-                likedByUsers.put(new JSONObject().put("id", userId));
+            List<Integer> likedByUsers = roomService.getLikedUsers(room.getId());
+            Set<Image> roomImages = room.getImages();
+            List<String> images = new ArrayList<>();
+            for (Image image : roomImages) {
+                images.add(image.getImagePath(room.getHost().getEmail(), room.getId()));
             }
 
-            roomsJSON.put(new JSONObject().put("room_name", room.getName()).put("thumbnail", room.getThumbnail())
-                    .put("price", room.getPrice()).put("room_currency", room.getCurrency().getSymbol())
-                    .put("stay_type", room.getPriceType() == (PriceType.PER_NIGHT) ? "đêm" : "tuần")
-                    .put("likedByUser", likedByUsers));
+            roomsJSON
+                    .put(new JSONObject().put("room_name", room.getName()).put("thumbnail", room.renderThumbnailImage())
+                            .put("images", images)
+                            .put("price", room.getPrice()).put("room_currency", room.getCurrency().getSymbol())
+                            .put("stay_type", room.getPriceType() == (PriceType.PER_NIGHT) ? "đêm" : "tuần")
+                            .put("liked_by_users", likedByUsers));
         }
         jsonObject.put("category_id", categoryId).put("category_name", category.getName())
                 .put("category_image", category.getIconPath()).put("rooms", roomsJSON);
