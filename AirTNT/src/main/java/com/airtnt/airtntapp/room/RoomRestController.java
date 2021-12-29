@@ -79,7 +79,6 @@ public class RoomRestController {
             @RequestParam(value = "bed", required = false, defaultValue = "0") String bed,
             @RequestParam(value = "bathRoom", required = false, defaultValue = "0") String bathRoom,
             @RequestParam(value = "amentities", required = false, defaultValue = "") String amentitiesFilter) {
-        JSONObject jsonObject = new JSONObject();
         JSONArray roomsJSON = new JSONArray();
 
         Map<String, String> filters = new HashMap<>();
@@ -90,8 +89,6 @@ public class RoomRestController {
         filters.put("bed", bed);
         filters.put("bathRoom", bathRoom);
         filters.put("amentities", amentitiesFilter);
-
-        Category category = categoryService.getCategoryById(categoryId);
 
         List<Room> rooms = roomService.getRoomsByCategoryId(categoryId, true, 1, filters).getContent();
 
@@ -104,16 +101,14 @@ public class RoomRestController {
             }
 
             roomsJSON
-                    .put(new JSONObject().put("room_name", room.getName()).put("thumbnail", room.renderThumbnailImage())
+                    .put(new JSONObject().put("name", room.getName()).put("thumbnail", room.renderThumbnailImage())
                             .put("images", images)
                             .put("price", room.getPrice()).put("room_currency", room.getCurrency().getSymbol())
                             .put("stay_type", room.getPriceType() == (PriceType.PER_NIGHT) ? "đêm" : "tuần")
                             .put("liked_by_users", likedByUsers));
         }
-        jsonObject.put("category_id", categoryId).put("category_name", category.getName())
-                .put("category_image", category.getIconPath()).put("rooms", roomsJSON);
 
-        return jsonObject.toString();
+        return roomsJSON.toString();
     }
 
     @PostMapping("/rooms/checkName")
