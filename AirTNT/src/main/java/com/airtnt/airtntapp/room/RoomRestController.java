@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.airtnt.airtntapp.calendar.CalendarClass;
+import com.airtnt.airtntapp.category.CategoryService;
 import com.airtnt.airtntapp.city.CityService;
 import com.airtnt.airtntapp.rule.RuleService;
 import com.airtnt.airtntapp.state.StateService;
@@ -11,6 +12,7 @@ import com.airtnt.airtntapp.user.UserService;
 import com.airtnt.airtntapp.user.admin.UserNotFoundException;
 import com.airtnt.entity.Room;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airtnt.entity.Amentity;
@@ -52,6 +55,9 @@ public class RoomRestController {
     private RoomService roomService;
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -62,6 +68,49 @@ public class RoomRestController {
 
     @Autowired
     private CityService cityService;
+
+    @GetMapping("/rooms/{categoryId}")
+    public String fetchRoomsByCategoryId(@PathVariable("categoryId") Integer categoryId,
+            @RequestParam(value = "privacies", required = false, defaultValue = "") String privacies,
+            @RequestParam(value = "minPrice", required = false, defaultValue = "0") String minPrice,
+            @RequestParam(value = "maxPrice", required = false, defaultValue = "1000000000") String maxPrice,
+            @RequestParam(value = "bedRoom", required = false, defaultValue = "0") String bedRoom,
+            @RequestParam(value = "bed", required = false, defaultValue = "0") String bed,
+            @RequestParam(value = "bathRoom", required = false, defaultValue = "0") String bathRoom,
+            @RequestParam(value = "amentities", required = false, defaultValue = "") String amentitiesFilter) {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray roomsJSON = new JSONArray();
+
+        Map<String, String> filters = new HashMap<>();
+        filters.put("privacies", privacies);
+        filters.put("minPrice", minPrice);
+        filters.put("maxPrice", maxPrice);
+        filters.put("bedRoom", bedRoom);
+        filters.put("bed", bed);
+        filters.put("bathRoom", bathRoom);
+        filters.put("amentities", amentitiesFilter);
+
+        Category category = categoryService.getCategoryById(categoryId);
+
+        List<Room> rooms = roomService.getRoomsByCategoryId(categoryId, true, 1, filters).getContent();
+
+        for (Room room : rooms) {
+            JSONArray likedByUsers = new JSONArray();
+            List<Integer> likedUsers = roomService.getLikedUsers(room.getId());
+            for (Integer userId : likedUsers) {
+                likedByUsers.put(new JSONObject().put("id", userId));
+            }
+
+            roomsJSON.put(new JSONObject().put("room_name", room.getName()).put("thumbnail", room.getThumbnail())
+                    .put("price", room.getPrice()).put("room_currency", room.getCurrency().getSymbol())
+                    .put("stay_type", room.getPriceType() == (PriceType.PER_NIGHT) ? "đêm" : "tuần")
+                    .put("likedByUser", likedByUsers));
+        }
+        jsonObject.put("category_id", categoryId).put("category_name", category.getName())
+                .put("category_image", category.getIconPath()).put("rooms", roomsJSON);
+
+        return jsonObject.toString();
+    }
 
     @PostMapping("/rooms/checkName")
     public String checkName(@Param("id") Integer id, @Param("name") String name) {

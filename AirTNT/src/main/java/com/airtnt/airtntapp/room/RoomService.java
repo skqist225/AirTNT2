@@ -418,4 +418,8 @@ public class RoomService {
 		return roomRepository.getNumberOfRoom();
 	}
 
+	public List<Integer> getLikedUsers(Integer roomId) {
+		return roomRepository.getLikedUsers(roomId);
+	}
+
 }

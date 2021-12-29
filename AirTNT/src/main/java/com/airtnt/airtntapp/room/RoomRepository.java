@@ -15,6 +15,10 @@ import com.airtnt.entity.User;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer>, JpaSpecificationExecutor<Room> {
+
+        @Query(value = "select user_id from users_favorite_rooms where room_id = :roomId", nativeQuery = true)
+        public List<Integer> getLikedUsers(Integer roomId);
+
         @Query("SELECT r FROM Room r JOIN r.amentities ra WHERE r.category.id = :categoryId AND r.status = :status" +
                         " AND r.price >= :minPrice AND r.price <= :maxPrice" +
                         " AND r.bedroomCount >= :bedroomCount AND r.bathroomCount >= :bathroomCount AND r.bedCount >= :bedCount"
